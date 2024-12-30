@@ -12,6 +12,6 @@ namespace ProjectSem3.Models
         public int Status { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ICollection<Topic>? Topic { get; set; } // Mối quan hệ với bảng Topic
+        public ICollection<Topic>? Topic { get; set; } 
     }
 }

@@ -1,0 +1,112 @@
+﻿@model ProjectSem3.Models.Account
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h4>Edit Account</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AccountId" />
+            <div class="form-group">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" asp-items="ViewBag.Role" class="form-control">
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+                <span asp-validation-for="Experience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" readonly />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="Avatar" class="control-label"></label>
+                  <input type="file" name="photo" class="form-control mb-3" readonly /> 
+                @if (!string.IsNullOrEmpty(Model.Avatar))
+                {
+                    <img src="@Model.Avatar" alt="" style="width: 150px; height: auto; margin-bottom: 10px;" />
+                }*@
+                <input value="@Model.Avatar" name="pictureOld" class="d-none" />
+               @* <span asp-validation-for="Avatar" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="PositionId" class="control-label"></label>
+                <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionId" readonly></select>
+                <span asp-validation-for="PositionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpertiseId" class="control-label"></label>
+                <select asp-for="ExpertiseId" class="form-control" asp-items="ViewBag.ExpertiseId" readonly></select>
+                <span asp-validation-for="ExpertiseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LevelId" class="control-label"></label>
+                <select asp-for="LevelId" class="form-control" asp-items="ViewBag.LevelId" readonly></select>
+                <span asp-validation-for="LevelId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Experience" class="control-label"></label>
+                <select asp-for="Experience" asp-items="ViewBag.Experience" class="form-control" readonly>
+                    @for (int i = 1; i <= 30; i++)
+                    {
+                        <option value="@i">Experience @i year</option>
+                    }
+                </select>
+                <span asp-validation-for="Experience" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" readonly />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" readonly />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <input type="hidden" asp-for="Password" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input name="ConfirmPassword" type="hidden" value="@Model.Password" class="form-control" />
+            </div> *@
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <div class="align-items-center">
+                    <label>
+                        <input asp-for="Status" type="radio" value="0" checked /> Public
+                    </label>
+                    <label ml-2>
+                        <input asp-for="Status" type="radio" value="1" /> Private
+                    </label>
+                </div>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            @* <div class="form-group">
+                <label asp-for="Online" class="control-label"></label>
+                <input asp-for="Online" class="form-control" />
+                <span asp-validation-for="Online" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

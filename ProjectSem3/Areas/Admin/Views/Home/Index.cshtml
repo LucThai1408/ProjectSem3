@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<!-- Start Page Content here -->
+<!-- ============================================================== -->
+
+<div class="">
+    <div class="content">
+
+        <!-- Start container-fluid -->
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <div>
+                        <h4 class="header-title mb-3">Welcome !</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div>
+                        <div class="card-box widget-inline">
+                            <div class="row">
+                                <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                    <div class="text-center p-3">
+                                        <h2 class="mt-2"><i class="text-primary mdi mdi-access-point-network mr-2"></i> <b> </b></h2>
+                                        <p class="text-muted mb-0">Number of types of dishes</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                    <div class="text-center p-3">
+                                        <h2 class="mt-2"><i class="text-teal mdi mdi-airplay mr-2"></i> <b></b></h2>
+                                        <p class="text-muted mb-0">Number of dishes</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-sm-6 widget-inline-box">
+                                    <div class="text-center p-3">
+                                        <h2 class="mt-2"><i class="text-info mdi mdi-black-mesa mr-2"></i> <b> </b></h2>
+                                        <p class="text-muted mb-0">quantity to be booked</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-sm-6">
+                                    <div class="text-center p-3">
+                                        <h2 class="mt-2"><i class="text-danger mdi mdi-cellphone-link mr-2"></i> <b></b></h2>
+                                        <p class="text-muted mb-0">Total number of chefs</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <h5 class="mt-0 font-14 mb-3">Contacts</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover mails m-0 table table-actions-bar table-centered">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @*   @if (Model != null && Model.Chefs != null)
+                                {
+
+                                @foreach (var chef in Model.Chefs)
+                                {
+                                <tr>
+                                <td>
+                                <img src="@chef.Thumbnail" alt="contact-img" title="contact-img" class="rounded-circle" width="80" height="80">
+                                </td>
+                                <td> @chef.Name</td>
+                                <td>@chef.CreatedAt</td>
+                                </tr>
+                                }
+                                }
+                                else
+                                {
+                                <tr>
+                                <td colspan="3">No chefs available.</td>
+                                </tr>
+                                } *@
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+    <!-- end container-fluid -->
+    <!-- Footer Start -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    2017 - 2020 &copy; Simple theme by <a href="">Coderthemes</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- end Footer -->
+
+</div>
+<!-- end content -->
+</div>
+<!-- END content-page -->

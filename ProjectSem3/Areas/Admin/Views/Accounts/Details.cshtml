@@ -1,0 +1,94 @@
+﻿@model ProjectSem3.Models.Account
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div>
+    <h4>Details Account</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src="@Html.DisplayFor(model => model.Avatar)" alt="" style="width: 150px; height: auto; margin-bottom: 10px;" />
+            
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Role)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Role)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Position)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Position.PositionName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Expertise)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Expertise.ExpertiseName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Level)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Level.LevelName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Experience)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Experience) years
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        @if (Model.Status == 0)
+        {
+            <dd class = "col-sm-10">
+                Public
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">Private</dd>
+        }
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AccountId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

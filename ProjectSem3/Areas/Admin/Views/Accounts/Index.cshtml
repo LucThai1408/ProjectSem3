@@ -1,0 +1,96 @@
+﻿@model X.PagedList.IPagedList<ProjectSem3.Models.Account>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div>
+            <h4 class="header-title mb-3">List of account admin</h4>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-between align-items-center">
+    <p>
+        <a asp-action="Create" class="btn btn-success text-light">Create New</a>
+    </p>
+    <form asp-controler="Users" aps-action="Index" method="get" class="form-inline">
+        <div class="form-group">
+            <input type="text" name="name" class="form-control" />
+            <button class="btn btn-success">Search</button>
+        </div>
+    </form>
+
+</div>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Avatar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Expertise)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Level)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].CreatedAt)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                <img width="100" src=" @Html.DisplayFor(modelItem => item.Avatar)" alt="Alternate Text" />
+               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Expertise.ExpertiseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Level.LevelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AccountId" class="btn btn-info">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AccountId" class="btn btn-info">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AccountId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@* phân trang *@
+<div class="d-flex justify-content-center mt-3">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+            new PagedListRenderOptions
+    {
+        UlElementClasses = new List<string> { "pagination" },
+        LiElementClasses = new List<string> { "page-item" },
+        PageClasses = new List<string> { "page-link" },
+        ActiveLiElementClass = "active",
+        // DisabledLiElementClass = "disabled" (Nếu cần thiết)
+    })
+</div>
