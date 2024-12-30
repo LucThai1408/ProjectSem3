@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewData["Title"] = "ViewDeltailAccount";
+}
+<style>
+    /* General Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    /* Header */
+    header {
+        background-color: #3b5998;
+        padding: 15px;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+        }
+
+            .navbar .logo img {
+                margin-right: 10px;
+            }
+
+    .navbar-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    /* Profile Section */
+    .profile-section {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .profile-info .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .profile-info p {
+            font-size: 18px;
+            color: #777;
+        }
+
+    .edit-profile-btn {
+        background-color: #3b5998;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .edit-profile-btn:hover {
+            background-color: #4e70b2;
+        }
+
+    /* About Section */
+    .about-section {
+        margin-bottom: 40px;
+    }
+
+        .about-section h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .about-section p {
+            font-size: 16px;
+            color: #555;
+        }
+
+    /* Posts Section */
+    .posts-section h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .post {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .post-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .post-header span {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .post-time {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .post p {
+        font-size: 16px;
+        color: #555;
+    }
+
+</style>
+<!-- Profile Section -->
+<section class="profile-section">
+    <div class="profile-header">
+        <div class="profile-info">
+            <img src="/images/avatar.jpg" alt="Avatar" class="avatar">
+            <h1>Nguyễn Văn A</h1>
+            <button class="edit-profile-btn">Chỉnh sửa hồ sơ</button>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section">
+        <h2>Giới Thiệu</h2>
+        <p>Đây là một ví dụ về trang tài khoản giống như Facebook. Bạn có thể chỉnh sửa hồ sơ và đăng các bài viết của mình tại đây.</p>
+    </div>
+
+    <!-- Posts Section -->
+    <div class="posts-section">
+        <h2>Bài Viết Của Tôi</h2>
+        <div class="post">
+            <div class="post-header">
+                <img src="avatar.jpg" alt="Avatar" class="post-avatar">
+                <span>Nguyễn Văn A</span>
+                <span class="post-time">3 giờ trước</span>
+            </div>
+            <p>Chào mọi người, đây là bài viết đầu tiên của tôi trên trang mạng xã hội này!</p>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <img src="avatar.jpg" alt="Avatar" class="post-avatar">
+                <span>Nguyễn Văn A</span>
+                <span class="post-time">1 ngày trước</span>
+            </div>
+            <p>Một ngày tuyệt vời để học lập trình web!</p>
+        </div>
+    </div>
+</section>

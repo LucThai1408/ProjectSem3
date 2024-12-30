@@ -1,0 +1,208 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model ProjectSem3.Models.Account
+@{
+    ViewData["Title"] = "Account Details";
+}
+<style>
+    .profile {
+        width: 100%; /* Chiếm toàn bộ chiều ngang */
+        height: 200px; /* Chiều cao bằng màn hình */
+        display: flex; /* Dùng flexbox để căn giữa */
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        margin-top:-40px
+    }
+
+    .avatar {
+        width: 150px; /* Kích thước ảnh */
+        height: 150px; /* Kích thước ảnh */
+        border-radius: 50%; /* Bo tròn để thành hình tròn */
+        object-fit: cover; /* Giữ đúng tỷ lệ ảnh */
+        border: 2px solid #fff;
+        box-shadow: #000 0px 2px 8px 0px;
+    }
+
+</style>
+<form asp-action="UpdateAccount" method="post" class="account-details" enctype="multipart/form-data">
+    @Html.Raw(ViewBag.errNotFound)
+    @Html.Raw(ViewBag.errUpdateSuccess)
+    <!-- Avatar -->
+    <input type="hidden" id="Avatar" name="PictureOld" value="@Model.Avatar" class="form-controls" />
+    <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" class="form-controls" />
+    <input type="hidden" id="Password" name="Password" value="@Model.Password" class="form-controls" />
+    <h2 class="account-title">Account Information</h2>
+    <div class="profile">
+        <img src="@Model.Avatar" class="avatar" alt="">
+    </div>
+    <div class="account-info">
+        <!-- Full Name -->
+        <div class="account-item">
+            <label for="FullName"><strong>Full Name:</strong></label>
+            <input type="text" id="FullName" name="FullName" value="@Model.FullName" class="form-controls" placeholder="Enter your full name" />
+        </div>
+
+        <!-- Email -->
+        <div class="account-item">
+            <label for="Email"><strong>Email:</strong></label>
+            <input type="email" id="Email" name="Email" value="@Model.Email" class="form-controls" readonly />
+        </div>
+
+        <!-- Phone -->
+        <div class="account-item">
+            <label for="Phone"><strong>Phone:</strong></label>
+            <input type="text" id="Phone" name="Phone" value="@Model.Phone" class="form-controls" placeholder="Enter your phone number" />
+        </div>
+
+        <!-- Position -->
+        <div class="account-item">
+            <label for="PositionId"><strong>Position:</strong></label>
+            <select id="PositionId" asp-for="PositionId" class="form-controls" asp-items="ViewBag.PositionId"></select>
+        </div>
+
+        <!-- Expertise -->
+        <div class="account-item">
+            <label for="ExpertiseId"><strong>Expertise:</strong></label>
+            <select id="ExpertiseId" asp-for="ExpertiseId" class="form-controls" asp-items="ViewBag.ExpertiseId"></select>
+        </div>
+
+        <!-- Level -->
+        <div class="account-item">
+            <label for="LevelId"><strong>Level:</strong></label>
+            <select id="LevelId" asp-for="LevelId" class="form-controls" asp-items="ViewBag.LevelId"></select>
+        </div>
+
+        <!-- Experience -->
+        <div class="account-item">
+            <label for="Experience"><strong>Experience (Years):</strong></label>
+            <input type="number" max="50" id="Experience" name="Experience" value="@Model.Experience" class="form-controls" min="0" placeholder="Enter your experience" />
+        </div>
+
+        <!-- Status -->
+        <div class="account-item">
+            <strong>Status:</strong>
+            <div class="status-options">
+                <label>
+                    <input type="radio" name="Status" value="1" @(Model.Status == 1 ? "checked" : "") /> Public
+                </label>
+                <label>
+                    <input type="radio" name="Status" value="0" @(Model.Status == 0 ? "checked" : "") /> Private
+                </label>
+            </div>
+        </div>
+
+        <!-- Old Password -->
+        <div class="account-item">
+            <label for="OldPassword"><strong>Current Password:</strong></label>
+            <input type="password" id="OldPassword" name="OldPassword" class="form-controls" placeholder="Enter your current password" />
+            @Html.Raw(ViewBag.errNotPass)
+            @Html.Raw(ViewBag.errPass)
+        </div>
+        <div class="account-item">
+            <label for="OldPassword"><strong>New Password:</strong></label>
+            <input type="password" id="NewPassword" name="NewPassword" class="form-controls" placeholder="Enter your new password" />
+            @Html.Raw(ViewBag.errNotNewPass)
+        </div>
+        <!-- Avatar -->
+        <div class="account-item">
+            <label for="Avatar"><strong>Avatar:</strong></label>
+            <input type="file" name="fileupload" class="form-controls" accept="image/jpg,image/jpeg,image/png" />
+        </div>
+    </div>
+    <!-- Submit Button -->
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+
+<!-- Improved CSS -->
+<style>
+    .form-actions {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .form-controls {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+    .account-details {
+        margin-top: 40px;
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .account-title {
+        text-align: center;
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .account-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .account-item {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .account-item:hover {
+            background-color: #f7f7f7;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    .avatar-container {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .avatar-img {
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+
+    .status-options label {
+        margin-right: 20px;
+    }
+
+    .form-controls {
+        width: 100%;
+        margin-top: 8px;
+        padding: 0px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+</style>

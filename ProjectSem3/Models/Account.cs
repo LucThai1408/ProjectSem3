@@ -11,7 +11,7 @@ namespace ProjectSem3.Models
     [Required]
     public string? FullName { get; set; }
 
-    public string? Avatar { get; set; }
+        public string? Avatar { get; set; } = "/images/Avatar.jpg";
 
     public string? Role { get; set; } = "user";
 
@@ -44,6 +44,7 @@ namespace ProjectSem3.Models
     public Level? Level { get; set; } // Mối quan hệ với bảng Level
 
     [Range(0, 50, ErrorMessage = "The number of years of experience must be between 0 and 50")]
+    [Required(ErrorMessage = "The Experience field is required.")]
     public int Experience { get; set; }
 
     public int? Status { get; set; }
