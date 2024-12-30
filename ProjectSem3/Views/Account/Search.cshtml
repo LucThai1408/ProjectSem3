@@ -1,0 +1,180 @@
+﻿@model IEnumerable<ProjectSem3.Models.Account>
+@{
+    ViewData["Title"] = "Search";
+}
+<style>
+    /* General Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+    }
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+        }
+
+            .navbar .logo img {
+                margin-right: 10px;
+            }
+
+    .navbar-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    /* Search Section */
+    .search-section {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .search-box {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    #search-input {
+        width: 300px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    #search-btn {
+        padding: 10px 15px;
+        background-color: #3b5998;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+        #search-btn:hover {
+            background-color: #4e70b2;
+        }
+
+    /* Search Results Section */
+    .search-results {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .search-results h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+    .user-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .user-card {
+        background-color: #fff;
+        width: 250px;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+
+    /* Prevent image distortion */
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        object-fit: cover; /* Ensures the aspect ratio is maintained */
+        border: 2px solid #fff; /* Tùy chọn: Thêm viền trắng xung quanh */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tùy chọn: Thêm bóng đổ */
+    }
+
+
+    .user-info h3 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .user-info p {
+        font-size: 14px;
+        color: #777;
+    }
+
+    /* Detail button adjustments */
+    .connect-btn {
+        background-color: #3b5998;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: auto;
+    }
+
+        .connect-btn:hover {
+            background-color: #4e70b2;
+        }
+
+  
+
+
+</style>
+<!-- Search Results Section -->
+<section class="search-results">
+    <h2>Search results:</h2>
+    <div class="user-list">
+        @{
+            if(!Model.Any())
+            {
+                <h5 class="text-center">No matching results found.</h5>
+            }
+            foreach (var item in Model)
+            {
+                <div class="user-card">
+                    <img src="@item.Avatar" alt="Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <h3>@item.FullName</h3>
+                        <a asp-action="ViewDetailAccount" asp-controller="Account" class="connect-btn">Detail</a>
+                    </div>
+                </div>
+                
+            }
+        }
+    </div>
+</section>

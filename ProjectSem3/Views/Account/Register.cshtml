@@ -1,0 +1,139 @@
+﻿@model ProjectSem3.Models.Account
+@{
+    ViewData["Title"] = "Register";
+}
+<style>
+    /* CSS cho container mật khẩu */
+    .password-container {
+        position: relative;
+        width: 100%;
+    }
+
+    /* CSS cho ô nhập mật khẩu */
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        padding-right: 40px; /* Chừa khoảng trống cho icon con mắt */
+        box-sizing: border-box;
+    }
+
+    /* CSS cho nút con mắt */
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+        .toggle-password img {
+            width: 20px;
+            height: 20px;
+        }
+
+    .form-controls {
+        width: 100%;
+        padding: 7px;
+        margin-top: 8px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+    }
+</style>
+<!-- MAIN -->
+<main class="signup__main">
+    <img class="signup__bg" src="/Client/images/signup-bg.png" alt="bg">
+
+    <div class="container">
+        <div class="signup__container">
+            <div class="signup__logo">
+                <a href="#"><img src="/Client/fonts/icons/main/Logo_Forum.svg" alt="logo">Unity</a>
+            </div>
+
+            <div class="signup__head">
+                <h3>Create a New Unity Account</h3>
+                <p>By singin up you can start posting, replaying to topics, earn badges, favorite, vote topics and many more.</p>
+            </div>
+            <div class="signup__form">
+                 <form asp-action="Register" method="post" id="registerForm" class="form">
+                    <div class="signup__section">
+                        <label class="signup__label" for="FullName">FullName</label>
+                        <input type="text" asp-for="FullName" class="form-control" >
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                    <div class="signup__section">
+                        <label class="signup__label" for="email">Email</label>
+                        <input type="text" asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        @Html.Raw(ViewBag.errEmail)
+                    </div>
+                    <div class="signup__section">
+                        <label class="signup__label" for="password">Password</label>
+                        <div class="password-container">
+                            <input type="password" name="password" class="form-control" id="password">
+                            <!-- Nút con mắt -->
+                            <span class="toggle-password" onclick="togglePasswordVisibility()">
+                                <img id="eye-icon" src="https://cdn-icons-png.flaticon.com/512/159/159604.png"
+                                     alt="Show Password" />
+                            </span>
+                            @Html.Raw(ViewBag.errPass)
+                        </div>
+                    </div>
+                    <div class="signup__section">
+                        <label class="signup__label" for="confirmPassword">Confirm Pasword</label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="signup__section">
+                        <label class="signup__label" for="phone">Phone</label>
+                        <input type="number" asp-for="Phone" class="form-control">
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                        @Html.Raw(ViewBag.errPhone)
+                    </div>
+                    <!-- Position -->
+                    <div class="account-item">
+                        <label for="PositionId"><strong>Position:</strong></label>
+                        <select id="PositionId" asp-for="PositionId" class="form-controls" asp-items="ViewBag.PositionId"></select>
+                    </div>
+                    <!-- Expertise -->
+                    <div class="account-item" style="margin-top:30px;">
+                        <label for="ExpertiseId"><strong>Expertise:</strong></label>
+                        <select id="ExpertiseId" asp-for="ExpertiseId" class="form-controls" asp-items="ViewBag.ExpertiseId"></select>
+                    </div>
+
+                    <!-- Level -->
+                    <div class="account-item" style="margin-top:30px;">
+                        <label for="LevelId"><strong>Level:</strong></label>
+                        <select id="LevelId" asp-for="LevelId" class="form-controls" asp-items="ViewBag.LevelId"></select>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="account-item" style="margin-top:30px;">
+                        <label for="Experience"><strong>Experience (Years):</strong></label>
+                        <input type="number" id="Experience" asp-for="Experience" class="form-controls" />
+                        <span asp-validation-for="Experience" class="text-danger"></span>
+                    </div>
+                    <div style="margin-top:30px;">
+                        <p>Already have an account? <a asp-controller="Account" asp-action="Index">Login</a></p>
+                    </div>
+                    <button type="submit" class="signup__btn-create btn btn--type-02">Register</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById("password");
+        const eyeIcon = document.getElementById("eye-icon");
+
+        // Kiểm tra và chuyển đổi type của input
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text"; // Hiển thị mật khẩu
+            eyeIcon.src = "https://cdn-icons-png.flaticon.com/512/565/565655.png"; // Icon mắt đóng
+        } else {
+            passwordInput.type = "password"; // Ẩn mật khẩu
+            eyeIcon.src = "https://cdn-icons-png.flaticon.com/512/159/159604.png"; // Icon mắt mở
+        }
+    }
+</script>
