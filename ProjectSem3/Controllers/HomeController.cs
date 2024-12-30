@@ -15,6 +15,8 @@ namespace ProjectSem3.Controllers
 
         public IActionResult Index()
         {
+            var activeUsers = ActiveUsersMiddleware.GetActiveUsersCount();
+            ViewBag.ActiveUsers = activeUsers;
             return View();
         }
 
