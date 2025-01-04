@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Topics
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -37,7 +38,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
            
         }
-
+        [Authorize]
         // GET: Admin/Topics/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +57,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(topic);
         }
-
+        [Authorize]
         // GET: Admin/Topics/Create
         public IActionResult Create()
         {
@@ -68,6 +69,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TopicId,Title,CategoryId,CreatedAt")] Topic topic)
         {
@@ -80,7 +82,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categorie, "CategoryId", "CategoryName", topic.CategoryId);
             return View(topic);
         }
-
+        [Authorize]
         // GET: Admin/Topics/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -102,6 +104,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TopicId,Title,CategoryId,CreatedAt")] Topic topic)
         {
@@ -133,7 +136,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Categorie, "CategoryId", "CategoryName", topic.CategoryId);
             return View(topic);
         }
-
+        [Authorize]
         // GET: Admin/Topics/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -154,6 +157,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         }
 
         // POST: Admin/Topics/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

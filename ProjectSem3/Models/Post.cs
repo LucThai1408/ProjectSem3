@@ -20,7 +20,7 @@ namespace ProjectSem3.Models
         public int TopicId { get; set; }
         public Topic? Topic { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Favorite>? Favorite { get; set; } // Mối quan hệ với bảng Favorite
     }

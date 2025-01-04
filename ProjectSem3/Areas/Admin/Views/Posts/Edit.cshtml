@@ -32,11 +32,7 @@
                 }
             </div>
             <input value="@Model.Image" name="pictureOld" class="d-none" />
-            <div class="form-group">
-                <label asp-for="AccountId" class="control-label"></label>
-                <select asp-for="AccountId" class="form-control" asp-items="ViewBag.AccountId"></select>
-                <span asp-validation-for="AccountId" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="AccountId" value="@User.FindFirst("accountId")?.Value" />
             <div class="form-group">
                 <label asp-for="TopicId" class="control-label"></label>
                 <select asp-for="TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>

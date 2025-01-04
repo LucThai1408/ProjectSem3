@@ -34,9 +34,6 @@
             <th class="col-2">
                 @Html.DisplayNameFor(model => model[0].Image)
             </th>
-            <th class="col-2">
-                @Html.DisplayNameFor(model => model[0].Accounts)
-            </th>
             <th class="col-1">  
                 @Html.DisplayNameFor(model => model[0].Topic)
             </th>
@@ -48,15 +45,17 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+
         <tr>
+                @{
+                    var truncatedTitle = item.Title.Length > 10 ? item.Title.Substring(0, 30) + "..." : item.Title;
+                }
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                    @truncatedTitle
+
             </td>
             <td>
                     <img width="100" src=" @Html.DisplayFor(modelItem => item.Image)" alt="Alternate Text" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Accounts.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Topic.Title)

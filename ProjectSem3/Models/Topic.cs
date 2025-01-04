@@ -12,7 +12,7 @@ namespace ProjectSem3.Models
 
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Post>? Post { get; set; }
     }

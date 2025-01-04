@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using ProjectSem3.Models;
 using X.PagedList.Extensions;
 
@@ -19,7 +21,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Answers
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -37,7 +39,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             return View(pagedList);
 
         }
-
+        [Authorize]
         // GET: Admin/Answers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,7 +59,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(answer);
         }
-
+        [Authorize]
         // GET: Admin/Answers/Create
         public IActionResult Create()
         {
@@ -71,8 +73,10 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create( Answer answer, IFormFile? photo)
         {
+
             if (photo == null || photo.Length == 0)
             {
                 ModelState.AddModelError("photo", "Please upload an image.");
@@ -82,6 +86,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             else
             {
+                var accountIdClaim = User.FindFirst("accountId");
+                if (accountIdClaim != null)
+                {
+                    answer.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+                }
                 var filePath = Path.Combine("wwwroot/images", photo.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -96,7 +105,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             }
         }
-
+        [Authorize]
         // GET: Admin/Answers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -120,6 +129,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, Answer answer, IFormFile photo, string pictureOld)
         {
             if (id != answer.AnswerId)
@@ -128,6 +138,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             try
             {
+                var accountIdClaim = User.FindFirst("accountId");
+                if (accountIdClaim != null)
+                {
+                    answer.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+                }
                 if (photo != null && photo.Length > 0)
                 {
                     var filePath = Path.Combine("wwwroot/images", photo.FileName);
@@ -159,7 +174,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
             }
         }
-
+        [Authorize]
         // GET: Admin/Answers/Delete/5  
         public async Task<IActionResult> Delete(int? id)
         {
@@ -179,7 +194,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(answer);
         }
-
+        [Authorize]
         // POST: Admin/Answers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -46,9 +46,13 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
+                @{
+                    var content = item.Content.Length > 10 ? item.Content.Substring(0, 30) + "..." : item.Content;
+                }
+                <td>
+                    @content
+
+                </td>
             <td>
                     <img width="100" src=" @Html.DisplayFor(modelItem => item.Image)" alt="Alternate Text" />
             </td>

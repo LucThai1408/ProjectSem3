@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Levels
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -38,7 +39,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             var pagedList = Search.ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
-
+        [Authorize]
         // GET: Admin/Levels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -56,7 +57,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(level);
         }
-
+        [Authorize]
         // GET: Admin/Levels/Create
         public IActionResult Create()
         {
@@ -68,6 +69,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("LevelId,LevelName,CreatedAt")] Level level)
         {
             if (ModelState.IsValid)
@@ -78,7 +80,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             return View(level);
         }
-
+        [Authorize]
         // GET: Admin/Levels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -94,12 +96,13 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             return View(level);
         }
-
+        [Authorize]
         // POST: Admin/Levels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("LevelId,LevelName,CreatedAt")] Level level)
         {
             if (id != level.LevelId)
@@ -129,7 +132,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             return View(level);
         }
-
+        [Authorize]
         // GET: Admin/Levels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -147,7 +150,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(level);
         }
-
+        [Authorize]
         // POST: Admin/Levels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

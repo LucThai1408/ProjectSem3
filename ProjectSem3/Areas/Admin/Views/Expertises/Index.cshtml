@@ -41,10 +41,14 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>@stt</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpertiseName)
-            </td>
+                <td>@stt</td>
+                @{
+                    var Name = item.ExpertiseName.Length > 10 ? item.ExpertiseName.Substring(0, 30) + "..." : item.ExpertiseName;
+                }
+                <td>
+                    @Name
+
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>

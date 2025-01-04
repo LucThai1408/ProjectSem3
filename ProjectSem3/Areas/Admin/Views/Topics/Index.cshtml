@@ -45,10 +45,14 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>@stt</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
+                <td>@stt</td>
+                @{
+                    var Title = item.Title.Length > 10 ? item.Title.Substring(0, 30) + "..." : item.Title;
+                }
+                <td>
+                    @Title
+
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
             </td>

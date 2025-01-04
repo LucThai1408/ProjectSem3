@@ -10,7 +10,7 @@ namespace ProjectSem3.Models
         [Required]
         public string? CategoryName { get; set; }
         public int Status { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Topic>? Topic { get; set; } 
     }

@@ -44,9 +44,14 @@
 @foreach (var item in Model) {
         <tr>
             <td>@stt</td>
+            @{
+                    var CategoryName = item.CategoryName.Length > 10 ? item.CategoryName.Substring(0, 30) + "..." : item.CategoryName;
+            }
             <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
+                @CategoryName
+
             </td>
+            
             <td>
                 @(item.Status == 0 ? "Public": "Private")
             </td>

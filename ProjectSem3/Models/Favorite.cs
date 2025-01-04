@@ -18,6 +18,6 @@ namespace ProjectSem3.Models
         public int? AnswerId { get; set; }
         public Answer? Answer { get; set; } // Liên kết với bảng Question (nếu yêu thích câu hỏi)
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

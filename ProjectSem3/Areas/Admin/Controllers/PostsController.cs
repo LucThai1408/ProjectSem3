@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Posts
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -38,7 +39,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             return View(pagedList);
             
         }
-
+        [Authorize]
         // GET: Admin/Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -58,7 +59,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(post);
         }
-
+        [Authorize]
         // GET: Admin/Posts/Create
         public IActionResult Create()
         {
@@ -72,8 +73,16 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Post post, IFormFile? photo)
         {
+            var accountIdClaim = User.FindFirst("accountId");
+            if (accountIdClaim != null)
+            {
+                post.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+            }
+
+
             // Ensure TopicId exists in the database
             if (!_context.Topic.Any(t => t.TopicId == post.TopicId))
             {
@@ -85,7 +94,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             if (photo == null || photo.Length == 0)
             {
-                ModelState.AddModelError("photo", "Please upload an image.");
+                ModelState.AddModelError("Image", "Please upload an image.");
                 ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "FullName");
                 ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title");
                 return View(post);
@@ -112,7 +121,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             }
         }
-
+        [Authorize]
         // GET: Admin/Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -135,6 +144,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Post post, IFormFile photo, string pictureOld)
         {
@@ -146,6 +156,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             try
             {
+                var accountIdClaim = User.FindFirst("accountId");
+                if (accountIdClaim != null)
+                {
+                    post.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+                }
                 if (photo != null && photo.Length > 0)
                 {
                     // Đường dẫn lưu ảnh mới
@@ -178,7 +193,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
             }
         }
-
+        [Authorize]
         // GET: Admin/Posts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -198,7 +213,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(post);
         }
-
+        [Authorize]
         // POST: Admin/Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

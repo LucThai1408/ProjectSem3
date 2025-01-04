@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Positions
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -36,7 +37,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             var pagedList = Search.ToPagedList(pageNumber, pageSize);
             return View(pagedList);
         }
-
+        [Authorize]
         // GET: Admin/Positions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -54,7 +55,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(position);
         }
-
+        [Authorize]
         // GET: Admin/Positions/Create
         public IActionResult Create()
         {
@@ -66,6 +67,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("PositionId,PositionName,CreatedAt")] Position position)
         {
             if (ModelState.IsValid)
@@ -76,7 +78,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             return View(position);
         }
-
+        [Authorize]
         // GET: Admin/Positions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -97,6 +99,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PositionId,PositionName,CreatedAt")] Position position)
         {
@@ -127,7 +130,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             return View(position);
         }
-
+        [Authorize]
         // GET: Admin/Positions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -145,7 +148,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(position);
         }
-
+        [Authorize]
         // POST: Admin/Positions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

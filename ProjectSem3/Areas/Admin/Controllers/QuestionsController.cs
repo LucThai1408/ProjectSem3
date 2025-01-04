@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Admin/Questions
         public async Task<IActionResult> Index(int? page, string? name)
         {
@@ -39,7 +40,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
           
         }
-
+        [Authorize]
         // GET: Admin/Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -58,7 +59,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(question);
         }
-
+        [Authorize]
         // GET: Admin/Questions/Create
         public IActionResult Create()
         {
@@ -70,9 +71,15 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Question question, IFormFile? photo)
         {
+            var accountIdClaim = User.FindFirst("accountId");
+            if (accountIdClaim != null)
+            {
+                question.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+            }
             if (photo == null || photo.Length == 0)
             {
                 ModelState.AddModelError("photo", "Please upload an image.");
@@ -96,7 +103,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
                
         }
-
+        [Authorize]
         // GET: Admin/Questions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -118,9 +125,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,Question question, IFormFile photo, string pictureOld)
         {
+
             if (id != question.QuestionId)
             {
                 
@@ -128,6 +137,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
             try
             {
+                var accountIdClaim = User.FindFirst("accountId");
+                if (accountIdClaim != null)
+                {
+                    question.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
+                }
                 if (photo != null && photo.Length > 0)
                 {
                     // Đường dẫn lưu ảnh mới
@@ -161,7 +175,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
 
         }
-
+        [Authorize]
         // GET: Admin/Questions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -180,7 +194,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             return View(question);
         }
-
+        [Authorize]
         // POST: Admin/Questions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
