@@ -47,6 +47,12 @@
                         @TempData["RegisterSuccess"]
                     </div>
                 }
+                @if (TempData["UpdateSuccessPass"] != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @TempData["UpdateSuccessPass"]
+                    </div>
+                }
                 <div class="error mb-2">
                     @Html.Raw(ViewBag.error)
                     @Html.Raw(ViewBag.err)
@@ -69,7 +75,7 @@
                             </span>
                         </div>
                     </div>
-                    <p>Don't have an account? <a asp-controller="Account" asp-action="Register">Sign Up</a></p>
+                    <p>Don't have an account? <a asp-controller="Account" asp-action="Register">Register</a></p>
                     <button type="submit" class="signup__btn-create btn btn--type-02">Login</button>
                 </form>
             </div>

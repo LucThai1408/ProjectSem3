@@ -1,6 +1,6 @@
-﻿
+﻿@model ProjectSem3.Models.Account;
 @{
-    ViewData["Title"] = "ViewDeltailAccount";
+    ViewData["Title"] = "ViewDetailAccount";
 }
 <style>
     /* General Reset */
@@ -14,13 +14,6 @@
     body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
-        color: #333;
-    }
-
-    /* Header */
-    header {
-        background-color: #3b5998;
-        padding: 15px;
     }
 
     .navbar {
@@ -69,11 +62,14 @@
     }
 
         .profile-info .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin-bottom: 10px;
+            width: 150px; /* Chiều rộng avatar */
+            height: 150px; /* Chiều cao avatar */
+            border-radius: 50%; /* Bo tròn để tạo khung hình tròn */
+            object-fit: cover; /* Đảm bảo hình ảnh vừa khung mà không bị méo */
+            border: 3px solid #fff; /* (Tùy chọn) Thêm viền trắng để làm nổi bật */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* (Tùy chọn) Thêm bóng đổ */
         }
+
 
         .profile-info h1 {
             font-size: 28px;
@@ -118,13 +114,12 @@
     /* Posts Section */
     .posts-section h2 {
         font-size: 24px;
-        color: #333;
+        color: black;
         margin-bottom: 20px;
     }
 
     .post {
         background-color: #fff;
-        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
@@ -140,6 +135,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        object-fit: cover;
         margin-right: 10px;
     }
 
@@ -158,42 +154,68 @@
         color: #555;
     }
 
+    .post a{
+        color: black !important;
+    }
+
+    .post a:hover{
+        color: grey;
+    }
+
+    .post h6{
+        color: #333;
+    }
+
 </style>
 <!-- Profile Section -->
 <section class="profile-section">
     <div class="profile-header">
         <div class="profile-info">
-            <img src="/images/avatar.jpg" alt="Avatar" class="avatar">
-            <h1>Nguyễn Văn A</h1>
-            <button class="edit-profile-btn">Chỉnh sửa hồ sơ</button>
+            <img src="@Model.Avatar" alt="Avatar" class="avatar">
+            <h1>@Model.FullName</h1>
         </div>
     </div>
 
     <!-- About Section -->
     <div class="about-section">
-        <h2>Giới Thiệu</h2>
-        <p>Đây là một ví dụ về trang tài khoản giống như Facebook. Bạn có thể chỉnh sửa hồ sơ và đăng các bài viết của mình tại đây.</p>
+        <h2>Introduction</h2>
+        @if (Model.Status == 0)
+        {
+            <p>User information has been hidden.</p>
+        }
+        else
+        {
+
+            <p><strong>Phone:</strong> @Model.Phone</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Position:</strong> @Model.Position.PositionName</p>
+            <p><strong>Expertise:</strong> @Model.Expertise.ExpertiseName</p>
+            <p><strong>Level:</strong> @Model.Level.LevelName</p>
+            <p><strong>Experience:</strong> @Model.Experience years</p>
+            <p></p>
+        }
     </div>
 
     <!-- Posts Section -->
     <div class="posts-section">
-        <h2>Bài Viết Của Tôi</h2>
-        <div class="post">
-            <div class="post-header">
-                <img src="avatar.jpg" alt="Avatar" class="post-avatar">
-                <span>Nguyễn Văn A</span>
-                <span class="post-time">3 giờ trước</span>
-            </div>
-            <p>Chào mọi người, đây là bài viết đầu tiên của tôi trên trang mạng xã hội này!</p>
-        </div>
-
-        <div class="post">
-            <div class="post-header">
-                <img src="avatar.jpg" alt="Avatar" class="post-avatar">
-                <span>Nguyễn Văn A</span>
-                <span class="post-time">1 ngày trước</span>
-            </div>
-            <p>Một ngày tuyệt vời để học lập trình web!</p>
-        </div>
+        <h2>The post of @Model.FullName</h2>
+        @if (ViewBag.Posts != null && ((IEnumerable<Post>)ViewBag.Posts).Any())
+        {
+            foreach (var post in (IEnumerable<Post>)ViewBag.Posts)
+            {
+                <div class="post">
+                    <div class="post-header">
+                        <img src="@Model.Avatar" alt="Avatar" class="post-avatar">
+                        <a asp-action="PostDetail" asp-controller="Post" asp-route-id="@post.PostId">
+                            <h6>@post.Title</h6>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>The user has no posts.</p>
+        }
     </div>
 </section>

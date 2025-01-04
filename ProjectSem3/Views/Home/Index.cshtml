@@ -5,9 +5,49 @@
 {
     <div class="alert alert-success text-center">@TempData["success"]</div>
 }
+<style>
+    .user-info-panel {
+        position: fixed;
+        top: 70px;
+        left: 20px; 
+        z-index: 1000; 
+        background-color: rgba(255, 255, 255, 0.8); 
+        border-radius: 8px;
+        padding: 10px 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+
+    .info-box {
+        margin-bottom: 10px;
+    }
+
+        .info-box h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: 18px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+</style>
 <!-- MAIN -->
 <main>
     <div class="container">
+        <!-- Information Panel -->
+        <div class="user-info-panel">
+            <div class="info-box">
+                <h4>Total Users : @ViewData["TotalAccount"]</h4>
+            </div>
+            <div class="info-box">
+                <h4>Logged-in : @ViewData["LoggedInUsers"]</h4>
+            </div>
+        </div>
         <div class="nav">
             <div class="nav__categories js-dropdown">
                 <div class="nav__select">
