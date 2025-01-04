@@ -58,8 +58,8 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
                             <li><a asp-controller="Home" asp-action="Index">Home Page</a></li>
-                            <li><a href="single-topic.html">Single Topic Page</a></li>
-                            <li><a href="create-topic.html">Create Topic Page</a></li>
+                            <li><a asp-action="Create" asp-controller="Post">Create Topic Page</a></li>
+                            <li><a asp-action="Register" asp-controller="Account">Register Page</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -165,7 +165,7 @@
                 }
             </div>
             <div class="header__offset-btn">
-                <a href="create-topic.html"><img src="/Client/fonts/icons/main/New_Topic.svg" alt="New Topic"></a>
+                <a asp-action="Create" asp-controller="Post"><img src="/Client/fonts/icons/main/New_Topic.svg" alt="New Topic"></a>
             </div>
         </div>
     </header>

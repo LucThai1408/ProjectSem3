@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using ProjectSem3.Models;
 using System.Security.Claims;
 using System.Security.Principal;
+using X.PagedList.Extensions;
 
 namespace ProjectSem3.Controllers
 {
@@ -47,8 +49,10 @@ namespace ProjectSem3.Controllers
                 HttpContext.Session.SetString("LevelId", acc.LevelId.ToString());
                 HttpContext.Session.SetString("Experience", acc.Experience.ToString());
                 HttpContext.Session.SetString("Status", acc.Status.ToString());
-                HttpContext.Session.SetString("Online", acc.Online.ToString());
-
+                HttpContext.Session.SetString("Online", "1");
+                acc.Online = 1;
+                _context.Update(acc);
+                _context.SaveChanges();
                 TempData["success"] = "Login successful! Welcome back.";
 
                 return Redirect("/Home/Index");
@@ -60,11 +64,36 @@ namespace ProjectSem3.Controllers
 
         public IActionResult Logout()
         {
+            var accountIdString = HttpContext.Session.GetString("AccountId");
+
+            if (string.IsNullOrEmpty(accountIdString))
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            var accountId = Convert.ToInt32(accountIdString);
+            var user = _context.Account.Find(accountId);
+            if (user != null)
+            {
+                user.Online = 0;
+                _context.SaveChanges();
+            }
             HttpContext.Session.Clear();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Account");
         }
 
         public IActionResult Details()
+        {
+            string accountId = HttpContext.Session.GetString("AccountId");
+            if (string.IsNullOrEmpty(accountId))
+            {
+                return RedirectToAction("Index");
+            }
+            int accId = int.Parse(accountId);
+            var acc = _context.Account.Include(x => x.Position).Include(x => x.Level).Include(x => x.Expertise).FirstOrDefault(x => x.AccountId == accId);
+            ViewBag.Posts = _context.Post.OrderByDescending(x=>x.PostId).Where(x => x.AccountId == accId).ToList();
+            return View(acc);
+        }
+        public IActionResult ChangeInfor() 
         {
             string accountId = HttpContext.Session.GetString("AccountId");
             if (string.IsNullOrEmpty(accountId))
@@ -79,54 +108,61 @@ namespace ProjectSem3.Controllers
             return View(account);
         }
 
-        public IActionResult UpdateAccount(Account account ,IFormFile fileupload , string PictureOld,  string OldPassword , string NewPassword)
+        public IActionResult UpdateAccount(Account account, IFormFile fileupload, string PictureOld, string OldPassword, string NewPassword)
         {
+            // Lấy thông tin tài khoản từ cơ sở dữ liệu
             var acc = _context.Account.SingleOrDefault(x => x.AccountId == account.AccountId);
-            if (acc == null) {
+            if (acc == null)
+            {
                 ViewBag.errNotFound = "<div class='alert alert-danger text-danger'>Account not found</div>";
                 ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
                 ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
                 ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
-                return View("Details",acc);            
+                return View("Details", acc);
             }
+
             // Xác minh mật khẩu cũ nếu người dùng muốn thay đổi mật khẩu
             if (!string.IsNullOrEmpty(NewPassword))
             {
+                // Kiểm tra nếu mật khẩu cũ được cung cấp
                 if (string.IsNullOrEmpty(OldPassword))
                 {
                     ViewBag.errNotPass = "<small class='text-danger'>The field Current Password is required.</small>";
                     ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
                     ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
                     ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
-                    return View("Details", acc);
+                    return View("ChangeInfor", acc);
                 }
 
+                // Mã hóa mật khẩu cũ và so sánh với mật khẩu trong cơ sở dữ liệu
                 var oldPass = Cipher.GenerateMD5(OldPassword);
-                if (!acc.Password.Contains(oldPass)) {
-                    
+                if (acc.Password != oldPass)
+                {
                     ViewBag.errPass = "<small class='text-danger'>Current password is incorrect.</small>";
                     ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
                     ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
                     ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
-                    return View("Details", acc);
+                    return View("ChangeInfor", acc);
                 }
+
                 // Mã hóa và lưu mật khẩu mới
                 account.Password = Cipher.GenerateMD5(NewPassword);
+                TempData["UpdateSuccessPass"] = "Password updated successfully. Please log in again with your new password.";
+                // Đăng xuất người dùng nếu mật khẩu đã được thay đổi
+                HttpContext.Session.Clear();
             }
 
-            if (string.IsNullOrEmpty(NewPassword))
+            // Xử lý khi không thay đổi mật khẩu nhưng vẫn cần kiểm tra dữ liệu đầu vào
+            if (string.IsNullOrEmpty(NewPassword) && !string.IsNullOrEmpty(OldPassword))
             {
-                if (!string.IsNullOrEmpty(OldPassword))
-                {
-                    ViewBag.errNotNewPass = "<small class='text-danger'>The field NewPassword is required.</small>";
-                    ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
-                    ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
-                    ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
-                    return View("Details", acc);
-                }
+                ViewBag.errNotNewPass = "<small class='text-danger'>The field NewPassword is required.</small>";
+                ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
+                ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
+                ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
+                return View("ChangeInfor", acc);
             }
 
-            //xử lý upload
+            // Xử lý upload ảnh đại diện nếu có
             if (fileupload != null && fileupload.Length > 0)
             {
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileupload.FileName);
@@ -140,7 +176,8 @@ namespace ProjectSem3.Controllers
             {
                 account.Avatar = PictureOld;
             }
-            // Cập nhật thông tin khác
+
+            // Cập nhật thông tin tài khoản
             acc.FullName = account.FullName;
             acc.Email = account.Email;
             acc.Phone = account.Phone;
@@ -152,14 +189,19 @@ namespace ProjectSem3.Controllers
             acc.Password = account.Password;
             acc.Avatar = account.Avatar;
 
+            // Lưu thay đổi vào cơ sở dữ liệu
             _context.SaveChanges();
-            ViewBag.errUpdateSuccess = "<div class='alert alert-success text-center text-success'>Update account successfully.</div>";
+
+            // Thông báo thành công và chuyển hướng
+            TempData["UpdateSuccess"] = "Update account successfully..";
             ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName", account.PositionId);
             ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName", account.ExpertiseId);
             ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName", account.LevelId);
-            return View("Details", acc);
+            return RedirectToAction("Details");
         }
-        
+
+
+
         public IActionResult Register()
         {
             ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName");
@@ -214,12 +256,14 @@ namespace ProjectSem3.Controllers
             return View(acc);
         }
 
-        public IActionResult Search(string name)
+        public IActionResult Search(int? page ,string name)
         {
-            var account = _context.Account.OrderByDescending(x => x.AccountId);
+            int pageSize = 4;
+            int pageNumber = page ?? 1;
+            var account = _context.Account.OrderByDescending(x => x.AccountId).ToPagedList(pageNumber , pageSize);
             if (!string.IsNullOrEmpty(name))
             {
-               var  acc = _context.Account.Where(x => x.FullName.Contains(name.ToLower().Trim()));
+               var  acc = _context.Account.Where(x => x.FullName.Contains(name.ToLower().Trim())).ToPagedList(pageNumber,pageSize);
                 ViewData["SearchName"] = name;
                 return View(acc);
             }
@@ -227,7 +271,9 @@ namespace ProjectSem3.Controllers
             return View(account);
         }
         public IActionResult ViewDetailAccount(int id) {
-            return View();
+            var acc = _context.Account.Include(x => x.Position).Include(x=> x.Level).Include(x => x.Expertise).FirstOrDefault(x=> x.AccountId == id);
+            ViewBag.Posts = _context.Post.OrderByDescending(x=>x.PostId).Where(x => x.AccountId == id).ToList();
+            return View(acc);
         }
     }
 }

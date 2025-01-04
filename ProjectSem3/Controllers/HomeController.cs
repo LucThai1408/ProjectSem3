@@ -6,17 +6,19 @@ namespace ProjectSem3.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        DoctorContext _context;
+        public HomeController(DoctorContext context)
         {
-            _logger = logger;
+            this._context = context;
         }
 
         public IActionResult Index()
         {
-            var activeUsers = ActiveUsersMiddleware.GetActiveUsersCount();
-            ViewBag.ActiveUsers = activeUsers;
+            
+            var totalAccount = _context.Account.Count();
+            var loggedInUsers = _context.Account.Count(a => a.Online==1);
+            ViewData["TotalAccount"] = totalAccount;
+            ViewData["LoggedInUsers"] = loggedInUsers;
             return View();
         }
 
