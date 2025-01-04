@@ -1,0 +1,55 @@
+﻿@model ProjectSem3.Models.Post;
+@{
+    ViewData["Title"] = "PostDetail";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+    }
+
+    .content {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        .content h3 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.6rem;
+            color: #555;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .content .post-meta {
+            font-size: 1.1rem;
+            color: #888;
+            margin-top: 15px;
+        }
+</style>
+
+<div class="content">
+    <!-- Tiêu đề và nội dung bài viết -->
+    <h3>@Model.Title</h3>
+    <p>@Model.Content</p>
+
+    <!-- Metadata bài viết -->
+    <div class="post-meta">
+        <span>Được viết bởi @Model.Accounts.FullName</span> |
+        <span>@Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+    </div>
+</div>
+

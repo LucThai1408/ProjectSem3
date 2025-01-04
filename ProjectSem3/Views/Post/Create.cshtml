@@ -1,0 +1,71 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model ProjectSem3.Models.Post
+@{
+    ViewData["Title"] = "Create";
+}
+<!-- MAIN -->
+<main>
+    <div class="container">
+        <form asp-action="Create" enctype="multipart/form-data">
+            @{
+                var accountId = HttpContextAccessor.HttpContext.Session.GetString("AccountId");
+            }
+
+            <input type="hidden" asp-for="AccountId" value="@accountId" />
+            <div class="create">
+                <div class="create__head">
+                    <div class="create__title"><img src="/Client/fonts/icons/main/New_Topic.svg" alt="New topic">Create New Post</div>
+                    <span>Forum Guidelines</span>
+                </div>
+                <div class="create__section">
+                    <label class="create__label" for="title">Title</label>
+                    <input type="text" asp-for="Title" class="form-control" id="title" placeholder="Add here">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="create__section">
+                            <label class="create__label" for="category">Topic</label>
+                            <div class="form-group">
+                                <select asp-for="TopicId" class="form-control" asp-items="ViewBag.TopicId"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="create__section create__textarea">
+                    <label class="create__label" for="description">Content</label>
+                    <div class="create__textarea-head">
+                        <span><i class="icon-Quote"></i></span>
+                        <span><i class="icon-Bold"></i></span>
+                        <span><i class="icon-Italic"></i></span>
+                        <div class="create__textarea-separate"></div>
+                        <span><i class="icon-Share_Topic"></i></span>
+                        <span><i class="icon-BlockQuote"></i></span>
+                        <span><i class="icon-Performatted"></i></span>
+                        <span><i class="icon-Upload_Files"></i></span>
+                        <span class="create__textarea-separate"></span>
+                        <span><i class="icon-Bullet_List"></i></span>
+                        <span><i class="icon-heading"></i></span>
+                        <span><i class="icon-Horizontal_Line"></i></span>
+                        <span><i class="icon-Emoticon"></i></span>
+                        <span><i class="icon-Settings"></i></span>
+                        <span><i class="icon-Color_Picker"></i></span>
+                        <div class="create__textarea-btn">
+                            <a href="#" class="btn">Preview</a>
+                        </div>
+                    </div>
+                    <textarea asp-for="Content" class="form-control" id=""></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Image" class="control-label"></label>
+                        <input asp-for="Image" class="form-control" type="file" name="photo" />
+                    </div>
+                    <div class="create__footer">
+                        <a asp-action="Index" asp-controller="Home" class="create__btn-cansel btn">Cancel</a>
+                        <button class="create__btn-create btn btn--type-02">Create New Post</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</main>
+
