@@ -112,7 +112,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Add(post);
                     await _context.SaveChangesAsync();
-                    TempData["CreateSuccess"] = "Create account successfully..";
+                    TempData["CreateSuccess"] = "Create post successfully..";
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "FullName", post.AccountId);
@@ -180,7 +180,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(post);
                 await _context.SaveChangesAsync();
-                TempData["UpdateSuccess"] = "Update account successfully..";
+                TempData["UpdateSuccess"] = "Update post successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
@@ -205,32 +205,17 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
 
             var post = await _context.Post
-                .Include(p => p.Accounts)
-                .Include(p => p.Topic)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
                 return NotFound();
             }
 
-            return View(post);
-        }
-        [Authorize]
-        // POST: Admin/Posts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var post = await _context.Post.FindAsync(id);
-            if (post != null)
-            {
-                _context.Post.Remove(post);
-            }
-
+            _context.Post.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete post successfully..";
+            return RedirectToAction("Index");
         }
-
         private bool PostExists(int id)
         {
             return _context.Post.Any(e => e.PostId == id);

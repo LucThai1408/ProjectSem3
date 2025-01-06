@@ -75,7 +75,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(level);
-                await _context.SaveChangesAsync(); TempData["CreateSuccess"] = "Create account successfully..";
+                await _context.SaveChangesAsync(); TempData["CreateSuccess"] = "Create level successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(level);
@@ -116,7 +116,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(level);
                     await _context.SaveChangesAsync();
-                    TempData["UpdateSuccess"] = "Update account successfully..";
+                    TempData["UpdateSuccess"] = "Update level successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -149,24 +149,21 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(level);
-        }
-        [Authorize]
-        // POST: Admin/Levels/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var level = await _context.Level.FindAsync(id);
-            if (level != null)
+            var accCount = await _context.Account
+                .Where(t => t.LevelId == id)
+                .CountAsync();
+
+            if (accCount > 0)
             {
-                _context.Level.Remove(level);
+                TempData["errDelete"] = "Cannot delete this expertise because it contains account";
+                return RedirectToAction("Index");
             }
 
+            _context.Level.Remove(level);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete level successfully..";
+            return RedirectToAction("Index");
         }
-
         private bool LevelExists(int id)
         {
             return _context.Level.Any(e => e.LevelId == id);

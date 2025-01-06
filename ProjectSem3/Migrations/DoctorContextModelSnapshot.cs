@@ -160,42 +160,6 @@ namespace ProjectSem3.Migrations
                     b.ToTable("Expertise");
                 });
 
-            modelBuilder.Entity("ProjectSem3.Models.Favorite", b =>
-                {
-                    b.Property<int>("FavoriteId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FavoriteId"));
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AnswerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FavoriteId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("Favorite");
-                });
-
             modelBuilder.Entity("ProjectSem3.Models.Level", b =>
                 {
                     b.Property<int>("LevelId")
@@ -283,7 +247,6 @@ namespace ProjectSem3.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -350,7 +313,7 @@ namespace ProjectSem3.Migrations
                     b.HasOne("ProjectSem3.Models.Account", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProjectSem3.Models.Question", "Question")
@@ -360,37 +323,6 @@ namespace ProjectSem3.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("ProjectSem3.Models.Favorite", b =>
-                {
-                    b.HasOne("ProjectSem3.Models.Account", "Account")
-                        .WithMany("Favorite")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ProjectSem3.Models.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId");
-
-                    b.HasOne("ProjectSem3.Models.Post", "Post")
-                        .WithMany("Favorite")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("ProjectSem3.Models.Question", "Question")
-                        .WithMany("Favorite")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("Post");
 
                     b.Navigation("Question");
                 });
@@ -436,11 +368,6 @@ namespace ProjectSem3.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ProjectSem3.Models.Account", b =>
-                {
-                    b.Navigation("Favorite");
-                });
-
             modelBuilder.Entity("ProjectSem3.Models.Category", b =>
                 {
                     b.Navigation("Topic");
@@ -461,16 +388,9 @@ namespace ProjectSem3.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("ProjectSem3.Models.Post", b =>
-                {
-                    b.Navigation("Favorite");
-                });
-
             modelBuilder.Entity("ProjectSem3.Models.Question", b =>
                 {
                     b.Navigation("Answer");
-
-                    b.Navigation("Favorite");
                 });
 
             modelBuilder.Entity("ProjectSem3.Models.Topic", b =>

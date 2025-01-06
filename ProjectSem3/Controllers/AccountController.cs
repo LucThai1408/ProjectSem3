@@ -91,6 +91,7 @@ namespace ProjectSem3.Controllers
             int accId = int.Parse(accountId);
             var acc = _context.Account.Include(x => x.Position).Include(x => x.Level).Include(x => x.Expertise).FirstOrDefault(x => x.AccountId == accId);
             ViewBag.Posts = _context.Post.OrderByDescending(x=>x.PostId).Where(x => x.AccountId == accId).ToList();
+            ViewBag.Questions = _context.Question.OrderByDescending(x=>x.QuestionId).Where(x => x.AccountId == accId).ToList();
             return View(acc);
         }
         public IActionResult ChangeInfor() 

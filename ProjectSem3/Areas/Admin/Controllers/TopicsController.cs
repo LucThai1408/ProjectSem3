@@ -77,7 +77,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(topic);
                 await _context.SaveChangesAsync();
-                TempData["CreateSuccess"] = "Create account successfully..";
+                TempData["CreateSuccess"] = "Create topic successfully..";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categorie, "CategoryId", "CategoryName", topic.CategoryId);
@@ -120,7 +120,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(topic);
                     await _context.SaveChangesAsync();
-                    TempData["UpdateSuccess"] = "Update account successfully..";
+                    TempData["UpdateSuccess"] = "Update topic successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -148,15 +148,28 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
 
             var topic = await _context.Topic
-                .Include(t => t.Category)
                 .FirstOrDefaultAsync(m => m.TopicId == id);
             if (topic == null)
             {
                 return NotFound();
             }
 
-            return View(topic);
+            var topicCount = await _context.Post
+                .Where(t => t.TopicId == id)
+                .CountAsync();
+
+            if (topicCount > 0)
+            {
+                TempData["errDelete"] = "Cannot delete this topic because it contains post";
+                return RedirectToAction("Index");
+            }
+
+            _context.Topic.Remove(topic);
+            await _context.SaveChangesAsync();
+            TempData["DeleteSuccess"] = "Delete topic successfully..";
+            return RedirectToAction("Index");
         }
+
 
         // POST: Admin/Topics/Delete/5
         [Authorize]

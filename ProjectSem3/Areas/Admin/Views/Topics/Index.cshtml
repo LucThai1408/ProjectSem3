@@ -22,6 +22,14 @@
 {
     <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
 }
+@{
+    @if (TempData["errDelete"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["errDelete"]
+        </div>
+    }
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -51,30 +59,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>@stt</td>
                 @{
-                    var Title = item.Title.Length > 10 ? item.Title.Substring(0, 30) + "..." : item.Title;
+                    var Title = item.Title.Length > 10 ? item.Title.Substring(0, 10) + "..." : item.Title;
                 }
                 <td>
                     @Title
 
                 </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TopicId" class="btn btn-info">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TopicId" class="btn btn-info">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TopicId" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        stt++;
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TopicId" class="btn btn-info">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.TopicId" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TopicId" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            stt++;
+        }
     </tbody>
 </table>
 @* phân trang *@

@@ -52,7 +52,6 @@ namespace ProjectSem3.Models
     public int Online { get; set; } = 0;
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public ICollection<Favorite>? Favorite { get; set; }
     }
 
 }

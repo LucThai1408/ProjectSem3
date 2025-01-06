@@ -99,7 +99,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
                 _context.Add(answer);
                 await _context.SaveChangesAsync();
-                TempData["CreateSuccess"] = "Create account successfully..";
+                TempData["CreateSuccess"] = "Create answer successfully..";
                 return RedirectToAction(nameof(Index));
 
         }
@@ -158,7 +158,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(answer);
                 await _context.SaveChangesAsync();
-                TempData["UpdateSuccess"] = "Update account successfully..";
+                TempData["UpdateSuccess"] = "Update answer successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
@@ -183,30 +183,15 @@ namespace ProjectSem3.Areas.Admin.Controllers
             }
 
             var answer = await _context.Answer
-                .Include(a => a.Account)
-                .Include(a => a.Question)
                 .FirstOrDefaultAsync(m => m.AnswerId == id);
             if (answer == null)
             {
                 return NotFound();
             }
-
-            return View(answer);
-        }
-        [Authorize]
-        // POST: Admin/Answers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var answer = await _context.Answer.FindAsync(id);
-            if (answer != null)
-            {
-                _context.Answer.Remove(answer);
-            }
-
+            _context.Answer.Remove(answer);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete answer successfully..";
+            return RedirectToAction("Index");
         }
 
         private bool AnswerExists(int id)

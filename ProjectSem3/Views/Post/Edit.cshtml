@@ -1,16 +1,16 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @model ProjectSem3.Models.Post
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 <!-- MAIN -->
 <main>
     <div class="container">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-controller="Post" enctype="multipart/form-data">
             @{
                 var accountId = HttpContextAccessor.HttpContext.Session.GetString("AccountId");
             }
-
+            <input type="hidden" asp-for="PostId" />
             <input type="hidden" asp-for="AccountId" value="@accountId" />
             <div class="create">
                 <div class="create__head">
@@ -60,11 +60,15 @@
                     <div class="form-group">
                         <label asp-for="Image" class="control-label">Image</label>
                         <input asp-for="Image" class="form-control" type="file" name="photo" />
-                        <span asp-validation-for="Image" class="text-danger"></span>
+                        @if (!string.IsNullOrEmpty(Model.Image) && Model.Image != null)
+                        {
+                            <img src="@Model.Image" alt="" style="width: 150px; height: auto; margin-bottom: 10px;" />
+                        }
+                        <input value="@Model.Image" type="hidden" name="pictureOld" class="d-none" />
                     </div>
                     <div class="create__footer">
-                        <a asp-action="Index" asp-controller="Home" class="create__btn-cansel btn">Cancel</a>
-                        <button class="create__btn-create btn btn--type-02">Create New Post</button>
+                        <a asp-action="Details" asp-controller="Account" class="create__btn-cansel btn">Cancel</a>
+                        <button class="create__btn-create btn btn--type-02">Update Post</button>
                     </div>
                 </div>
         </form>

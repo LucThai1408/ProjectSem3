@@ -71,7 +71,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                TempData["CreateSuccess"] = "Create account successfully..";
+                TempData["CreateSuccess"] = "Create category successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -112,7 +112,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(category);
                     await _context.SaveChangesAsync();
-                    TempData["UpdateSuccess"] = "Update account successfully..";
+                    TempData["UpdateSuccess"] = "Update category successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,23 +145,20 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(category);
-        }
+            var topicCount = await _context.Topic
+                .Where(t => t.CategoryId == id)
+                .CountAsync();
 
-        // POST: Admin/Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var category = await _context.Categorie.FindAsync(id);
-            if (category != null)
+            if (topicCount > 0)
             {
-                _context.Categorie.Remove(category);
+                TempData["errDelete"] = "Cannot delete this category because it contains topic";
+                return RedirectToAction("Index");
             }
 
+            _context.Categorie.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete category successfully..";
+            return RedirectToAction("Index");
         }
 
         private bool CategoryExists(int id)

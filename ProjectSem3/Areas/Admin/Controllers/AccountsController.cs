@@ -212,40 +212,30 @@ namespace ProjectSem3.Areas.Admin.Controllers
             return View(account);*/
         }
 		[Authorize]
-		// GET: Admin/Accounts/Delete/5
-		public async Task<IActionResult> Delete(int? id)
+        // GET: Admin/Accounts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            var loginId = User.FindFirst("AccountId")?.Value;
+            if (loginId != null && id.Equals(int.Parse(loginId)))
+            {
+                TempData["errDelete"] = "Cannot delete the currently logged-in account";
+                return RedirectToAction("Index");
+            }
 
-            var account = await _context.Account
-                .Include(a => a.Expertise)
-                .Include(a => a.Level)
-                .Include(a => a.Position)
+            var acc = await _context.Account
                 .FirstOrDefaultAsync(m => m.AccountId == id);
-            if (account == null)
+            if (acc == null)
             {
                 return NotFound();
             }
-
-            return View(account);
-        }
-		[Authorize]
-		// POST: Admin/Accounts/Delete/5
-		[HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var account = await _context.Account.FindAsync(id);
-            if (account != null)
-            {
-                _context.Account.Remove(account);
-            }
-
+            _context.Account.Remove(acc);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete account successfully..";
+            return RedirectToAction("Index");
         }
 
         private bool AccountExists(int id)

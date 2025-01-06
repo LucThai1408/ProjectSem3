@@ -21,6 +21,18 @@
 {
     <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
 }
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["DeleteSuccess"]</div>
+}
+@{
+    @if (TempData["errDelete"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["errDelete"]
+        </div>
+    }
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -42,7 +54,7 @@
             <th class="col-2">
                 @Html.DisplayNameFor(model => model[0].Image)
             </th>
-            <th class="col-1">  
+            <th class="col-1">
                 @Html.DisplayNameFor(model => model[0].Topic)
             </th>
             <th class="col-2">
@@ -52,32 +64,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
 
-        <tr>
+            <tr>
                 @{
                     var truncatedTitle = item.Title.Length > 10 ? item.Title.Substring(0, 10) + "..." : item.Title;
                 }
-            <td>
+                <td>
                     @truncatedTitle
 
-            </td>
-            <td>
+                </td>
+                <td>
                     <img width="100" src=" @Html.DisplayFor(modelItem => item.Image)" alt="Alternate Text" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Topic.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PostId" class="btn btn-info">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PostId" class="btn btn-info">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PostId" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Topic.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.PostId" class="btn btn-info">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PostId" class="btn btn-info">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PostId" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 @* phân trang *@

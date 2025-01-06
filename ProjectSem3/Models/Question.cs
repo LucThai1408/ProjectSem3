@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjectSem3.Models
 {
@@ -8,13 +9,11 @@ namespace ProjectSem3.Models
         public int QuestionId { get; set; }
         public string? Content { get; set; }
         public string? Image { get; set; }
-
         public int AccountId { get; set; }
         public Account? Account { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<Answer>? Answer { get; set; } // Mối quan hệ với bảng Answer
-        public ICollection<Favorite>? Favorite { get; set; } // Mối quan hệ với bảng Favorite
+        public ICollection<Answer>? Answer { get; set; }
     }
 }

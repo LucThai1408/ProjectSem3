@@ -104,7 +104,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             _context.Add(question);
             await _context.SaveChangesAsync();
-            TempData["CreateSuccess"] = "Create account successfully..";
+            TempData["CreateSuccess"] = "Create question successfully..";
             return RedirectToAction(nameof(Index));
                 
 
@@ -166,7 +166,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(question);
                 await _context.SaveChangesAsync();
-                TempData["UpdateSuccess"] = "Update account successfully..";
+                TempData["UpdateSuccess"] = "Update question successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
@@ -184,39 +184,30 @@ namespace ProjectSem3.Areas.Admin.Controllers
         }
         [Authorize]
         // GET: Admin/Questions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
+            if (_context.Question == null)
             {
-                return NotFound();
+                return NotFound("Database context is null.");
+            }
+            var @question = await _context.Question
+            .Include(x => x.Answer)
+            .FirstOrDefaultAsync(x => x.QuestionId == id);
+            if (@question == null)
+            {
+                return NotFound($"Question with ID {id} not found.");
             }
 
-            var question = await _context.Question
-                .Include(q => q.Account)
-                .FirstOrDefaultAsync(m => m.QuestionId == id);
-            if (question == null)
+            // Xóa đối tượng
+            if (question.Answer != null && question.Answer.Any())
             {
-                return NotFound();
+                _context.Answer.RemoveRange(question.Answer);
             }
-
-            return View(question);
-        }
-        [Authorize]
-        // POST: Admin/Questions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var question = await _context.Question.FindAsync(id);
-            if (question != null)
-            {
-                _context.Question.Remove(question);
-            }
-
+            _context.Question.Remove(question);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete question successfully..";
+            return RedirectToAction("Index");
         }
-
         private bool QuestionExists(int id)
         {
             return _context.Question.Any(e => e.QuestionId == id);

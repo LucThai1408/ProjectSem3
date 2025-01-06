@@ -74,7 +74,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(position);
                 await _context.SaveChangesAsync();
-                TempData["CreateSuccess"] = "Create account successfully..";
+                TempData["CreateSuccess"] = "Create position successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(position);
@@ -115,7 +115,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(position);
                     await _context.SaveChangesAsync();
-                    TempData["UpdateSuccess"] = "Update account successfully..";
+                    TempData["UpdateSuccess"] = "Update position successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -148,22 +148,20 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(position);
-        }
-        [Authorize]
-        // POST: Admin/Positions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var position = await _context.Position.FindAsync(id);
-            if (position != null)
+            var accCount = await _context.Account
+                .Where(t => t.PositionId == id)
+                .CountAsync();
+
+            if (accCount > 0)
             {
-                _context.Position.Remove(position);
+                TempData["errDelete"] = "Cannot delete this position because it contains account";
+                return RedirectToAction("Index");
             }
 
+            _context.Position.Remove(position);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete position successfully..";
+            return RedirectToAction("Index");
         }
 
         private bool PositionExists(int id)

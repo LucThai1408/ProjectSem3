@@ -22,6 +22,5 @@ namespace ProjectSem3.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        public ICollection<Favorite>? Favorite { get; set; } // Mối quan hệ với bảng Favorite
     }
 }

@@ -207,7 +207,10 @@
                     <div class="post-header">
                         <img src="@Model.Avatar" alt="Avatar" class="post-avatar">
                         <a asp-action="PostDetail" asp-controller="Post" asp-route-id="@post.PostId">
-                            <h6>@post.Title</h6>
+                            @{
+                                var title = post.Title.Length > 50 ? post.Title.Substring(0, 50) + "..." : post.Title;
+                            }
+                            <h6>@title</h6>
                         </a>
                     </div>
                 </div>

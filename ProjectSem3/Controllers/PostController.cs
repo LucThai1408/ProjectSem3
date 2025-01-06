@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -42,14 +43,7 @@ namespace ProjectSem3.Controllers
                 ViewBag.Accounts = _context.Account.ToList();
                 return View(post);
             }
-            if (photo == null || photo.Length == 0)
-            {
-                ModelState.AddModelError("photo", "Please upload an image.");
-                ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "FullName");
-                ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title");
-                return View(post);
-            }
-            else
+            if (photo != null && photo.Length > 0)
             {
                 var filePath = Path.Combine("wwwroot/images", photo.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -58,18 +52,16 @@ namespace ProjectSem3.Controllers
                 }
 
                 post.Image = "/images/" + photo.FileName;
-                if (ModelState.IsValid)
+            }
+            if (ModelState.IsValid)
                 {
                     _context.Add(post);
                     await _context.SaveChangesAsync();
-                    TempData["CreateSuccess"] = "CreateSuccess successful!";
+                    TempData["CreateSuccess"] = "Create post successful!";
                     return RedirectToAction("Details" ,"Account" , new {id = accountId});
                 }
-                ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title", post.TopicId);
-                return View(post);
-
-
-            }
+            ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title", post.TopicId);
+            return View(post);
         }
 
         public IActionResult GetAllPost(int? page)
@@ -78,6 +70,93 @@ namespace ProjectSem3.Controllers
             int pageNumber = page ?? 1;
             var post = _context.Post.OrderByDescending(x => x.PostId).ToPagedList(pageNumber, pageSize);
             return View(post);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var post = await _context.Post.FindAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Email", post.AccountId);
+            ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title", post.TopicId);
+            return View(post);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Post post, IFormFile photo, string pictureOld)
+        {
+
+            if (id != post.PostId)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                if (photo != null && photo.Length > 0)
+                {
+                    // Đường dẫn lưu ảnh mới
+                    var filePath = Path.Combine("wwwroot/images", photo.FileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
+                    }
+
+                    post.Image = "/images/" + photo.FileName;
+                }
+                else
+                {
+                    post.Image = pictureOld;
+                }
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+                TempData["UpdatePostSuccess"] = "Update post successfully..";
+                return RedirectToAction("Details","Account");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PostExists(post.PostId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        // GET: Admin/Posts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var post = await _context.Post
+                .FirstOrDefaultAsync(m => m.PostId == id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            _context.Post.Remove(post);
+            await _context.SaveChangesAsync();
+            TempData["DeleteSuccess"] = "Delete post successfully..";
+            return RedirectToAction("Details","Account");
+        }
+        private bool PostExists(int id)
+        {
+            return _context.Post.Any(e => e.PostId == id);
         }
     }
 }

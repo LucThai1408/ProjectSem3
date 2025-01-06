@@ -166,6 +166,42 @@
     .post h6 {
         color: #333;
     }
+    .post-actions .btn {
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s ease; 
+    }
+
+    .post-actions .btn-primary {
+        background-color: #007bff; 
+        color: white;
+        border: none;
+    }
+
+        .post-actions .btn-primary:hover {
+            background-color: #0056b3; 
+        }
+
+    .post-actions .btn-danger {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+
+        .post-actions .btn-danger:hover {
+            background-color: #a71d2a; 
+        }
+
+    .post-actions {
+        margin-top: 10px;
+    }
+
+        .post-actions .btn {
+            margin-right: 5px;
+        }
 
 </style>
 <!-- Profile Section -->
@@ -176,6 +212,18 @@
 @if (TempData["CreateSuccess"] != null)
 {
     <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
+}
+@if (TempData["UpdatePostSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["UpdatePostSuccess"]</div>
+}
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["DeleteSuccess"]</div>
+}
+@if (TempData["DeleteQuestionSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["DeleteQuestionSuccess"]</div>
 }
 <section class="profile-section">
     <div class="profile-header">
@@ -209,8 +257,25 @@
                     <div class="post-header">
                         <img src="@Model.Avatar" alt="Avatar" class="post-avatar">
                         <a asp-action="PostDetail" asp-controller="Post" asp-route-id="@post.PostId">
-                            <h6>@post.Title</h6>
+                            @{
+                                var title = post.Title.Length > 50 ? post.Title.Substring(0, 50) + "..." : post.Title;
+                            }
+                            <h6>@title</h6>
                         </a>
+                    </div>
+                    <div class="post-actions">
+                        <!-- Nút Chỉnh sửa -->
+                        <a asp-action="Edit" asp-controller="Post" asp-route-id="@post.PostId" class="btn btn-primary btn-sm">
+                            Edit
+                        </a>
+
+                        <!-- Nút Xóa -->
+                        <form asp-action="Delete" asp-controller="Post" asp-route-id="@post.PostId" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this post?');">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             }
@@ -220,4 +285,43 @@
             <p>The user has no posts.</p>
         }
     </div>
-</section>
+
+    <!-- Posts Section -->
+    <div class="posts-section">
+        <h2>The question of @Model.FullName</h2>
+        @if (ViewBag.Questions != null && ((IEnumerable<Question>)ViewBag.Questions).Any())
+        {
+            foreach (var questions in (IEnumerable<Question>)ViewBag.Questions)
+            {
+                <div class="post">
+                    <div class="post-header">
+                        <img src="@Model.Avatar" alt="Avatar" class="post-avatar">
+                        <a asp-action="DetailQuestion" asp-controller="Q_A" asp-route-id="@questions.QuestionId">
+                            @{
+                                var content = questions.Content.Length > 50 ? questions.Content.Substring(0, 50) + "..." :    questions.Content;
+                            }
+                            <h6>@content</h6>
+                        </a>
+                    </div>
+                    <div class="post-actions">
+                        <!-- Nút Chỉnh sửa -->
+                        <a asp-action="Edit" asp-controller="Q_A" asp-route-id="@questions.QuestionId" class="btn btn-primary btn-sm">
+                            Edit
+                        </a>
+
+                        <!-- Nút Xóa -->
+                        <form asp-action="Delete" asp-controller="Q_A" asp-route-id="@questions.QuestionId" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this question?');">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>The user has no posts.</p>
+        }
+    </div>

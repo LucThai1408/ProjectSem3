@@ -74,7 +74,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(expertise);
                 await _context.SaveChangesAsync();
-                TempData["CreateSuccess"] = "Create account successfully..";
+                TempData["CreateSuccess"] = "Create expertise successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(expertise);
@@ -114,7 +114,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(expertise);
                     await _context.SaveChangesAsync();
-                    TempData["UpdateSuccess"] = "Update account successfully..";
+                    TempData["UpdateSuccess"] = "Update expertise successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -147,24 +147,21 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(expertise);
-        }
+            var accCount = await _context.Account
+                .Where(t => t.ExpertiseId == id)
+                .CountAsync();
 
-        // POST: Admin/Expertises/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var expertise = await _context.Expertise.FindAsync(id);
-            if (expertise != null)
+            if (accCount > 0)
             {
-                _context.Expertise.Remove(expertise);
+                TempData["errDelete"] = "Cannot delete this expertise because it contains account";
+                return RedirectToAction("Index");
             }
 
+            _context.Expertise.Remove(expertise);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            TempData["DeleteSuccess"] = "Delete expertise successfully..";
+            return RedirectToAction("Index");
         }
-
         private bool ExpertiseExists(int id)
         {
             return _context.Expertise.Any(e => e.ExpertiseId == id);

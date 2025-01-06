@@ -20,6 +20,18 @@
 {
     <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
 }
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["DeleteSuccess"]</div>
+}
+@{
+    @if (TempData["errDelete"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["errDelete"]
+        </div>
+    }
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -69,7 +81,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-info">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-info">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-danger">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.CategoryId" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         stt++;
