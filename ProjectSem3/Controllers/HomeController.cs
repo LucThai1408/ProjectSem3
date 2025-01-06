@@ -26,7 +26,34 @@ namespace ProjectSem3.Controllers
             var question = _context.Question.OrderByDescending(x=>x.QuestionId).ToPagedList(pageNumber , pageSize);
             return View(question);
         }
+        public async Task<IActionResult> ListPostition(int? page)
+        {
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
 
+            var positions = _context.Position.Include(a => a.Account).AsQueryable();
+            var pagedList = positions.ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
+        }
+
+        public async Task<IActionResult> ListLevel(int? page)
+        {
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var positions = _context.Level.Include(a => a.Account).AsQueryable();
+            var pagedList = positions.ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
+        }
+        public async Task<IActionResult> ListExpertise(int? page)
+        {
+            int pageSize = 10;
+            int pageNumber = page ?? 1;
+
+            var positions = _context.Expertise.Include(a => a.Account).AsQueryable();
+            var pagedList = positions.ToPagedList(pageNumber, pageSize);
+            return View(pagedList);
+        }
         public IActionResult Privacy()
         {
             return View();
