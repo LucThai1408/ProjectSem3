@@ -30,7 +30,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageNumber = page ?? 1; // Trang hiện tại (mặc định là 1)
 
             // Khởi tạo truy vấn
-            var Search = _context.Account
+            var Search = _context.Account.OrderByDescending(a => a.AccountId)
                                  .Include(a => a.Expertise)
                                  .Include(a => a.Level)
                                  .Include(a => a.Position)
@@ -86,15 +86,15 @@ namespace ProjectSem3.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Account account, IFormFile? photo)
         {
-            //if (photo == null || photo.Length == 0)
-            //{
-            //    ModelState.AddModelError("photo", "Please upload an image.");
-            //    ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName");
-            //    ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName");
-            //    ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName");
-            //    return View(account);
-            //}
-            if(account.Password == null)
+            if (photo == null || photo.Length == 0)
+            {
+                ModelState.AddModelError(nameof(account.Avatar), "Please upload an image.");
+                ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName");
+                ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName");
+                ViewData["PositionId"] = new SelectList(_context.Position, "PositionId", "PositionName");
+                return View(account);
+            }
+            if (account.Password == null)
             {
                 ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseName");
                 ViewData["LevelId"] = new SelectList(_context.Level, "LevelId", "LevelName");
@@ -122,6 +122,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Add(account);
                     await _context.SaveChangesAsync();
+                    TempData["CreateSuccess"] = "Create account successfully..";
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["ExpertiseId"] = new SelectList(_context.Expertise, "ExpertiseId", "ExpertiseId", account.ExpertiseId);
@@ -190,7 +191,8 @@ namespace ProjectSem3.Areas.Admin.Controllers
                     existingAccount.Status = account.Status;
                     _context.Update(existingAccount);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                TempData["UpdateSuccess"] = "Update account successfully..";
+                return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {

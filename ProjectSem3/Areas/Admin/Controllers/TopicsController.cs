@@ -26,7 +26,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
         {
             int pageSize = 10;
             int pageNumber = page ?? 1;
-            var Search = _context.Topic
+            var Search = _context.Topic.OrderByDescending(a => a.TopicId)
                                  .Include(a => a.Category)
                                  .AsQueryable();
             if (!string.IsNullOrEmpty(name))
@@ -77,6 +77,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(topic);
                 await _context.SaveChangesAsync();
+                TempData["CreateSuccess"] = "Create account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categorie, "CategoryId", "CategoryName", topic.CategoryId);
@@ -119,6 +120,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(topic);
                     await _context.SaveChangesAsync();
+                    TempData["UpdateSuccess"] = "Update account successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {

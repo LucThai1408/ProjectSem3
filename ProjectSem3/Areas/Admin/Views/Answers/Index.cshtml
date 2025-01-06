@@ -13,6 +13,14 @@
         </div>
     </div>
 </div>
+@if (TempData["UpdateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["UpdateSuccess"]</div>
+}
+@if (TempData["CreateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -32,7 +40,7 @@
                 @Html.DisplayNameFor(model => model[0].Content)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model[0].Image)
+                @Html.DisplayNameFor(model => model[0].Question)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model[0].Account)
@@ -46,18 +54,22 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-                @{
-                    var content = item.Content.Length > 10 ? item.Content.Substring(0, 30) + "..." : item.Content;
-                }
-                <td>
-                    @content
+            @{
+                var answer = item.Content.Length > 10 ? item.Content.Substring(0, 10) + "..." : item.Content;
+            }
+            <td>
+                @answer
+
+            </td>
+            @{
+                var Question = item.Question.Content.Length > 20 ? item.Question.Content.Substring(0, 20) + "..." : item.Question.Content;
+            }
+            <td>
+                @Question
 
                 </td>
             <td>
-                    <img width="100" src=" @Html.DisplayFor(modelItem => item.Image)" alt="Alternate Text" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account.Email)
+                @Html.DisplayFor(modelItem => item.Account.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)

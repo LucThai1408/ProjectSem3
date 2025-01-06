@@ -12,6 +12,14 @@
         </div>
     </div>
 </div>
+@if (TempData["UpdateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["UpdateSuccess"]</div>
+}
+@if (TempData["CreateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -45,7 +53,7 @@
         <tr>
             <td>@stt</td>
             @{
-                    var CategoryName = item.CategoryName.Length > 10 ? item.CategoryName.Substring(0, 30) + "..." : item.CategoryName;
+                    var CategoryName = item.CategoryName.Length > 10 ? item.CategoryName.Substring(0, 10) + "..." : item.CategoryName;
             }
             <td>
                 @CategoryName

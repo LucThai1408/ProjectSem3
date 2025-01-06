@@ -13,6 +13,14 @@
         </div>
     </div>
 </div>
+@if (TempData["UpdateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["UpdateSuccess"]</div>
+}
+@if (TempData["CreateSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["CreateSuccess"]</div>
+}
 <div class="d-flex justify-content-between align-items-center">
     <p>
         <a asp-action="Create" class="btn btn-success text-light">Create New</a>
@@ -29,13 +37,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Image)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model[0].Account)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Content)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model[0].CreatedAt)
@@ -47,18 +52,19 @@
 @foreach (var item in Model) {
         <tr>
                 @{
-                    var Title = item.Title.Length > 10 ? item.Title.Substring(0, 30) + "..." : item.Title;
+                    var Title = item.Account.FullName.Length > 10 ? item.Account.FullName.Substring(0, 10) + "..." : item.Account.FullName;
                 }
                 <td>
                     @Title
 
                 </td>
-            <td>
-                    <img width="100" src=" @Html.DisplayFor(modelItem => item.Image)" alt="Alternate Text" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Account.FullName)
-            </td>
+                @{
+                    var Content = item.Content.Length > 30 ? item.Content.Substring(0, 10) + "..." : item.Content;
+                }
+                <td>
+                    @Content
+
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>

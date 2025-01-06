@@ -28,11 +28,11 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageSize = 10; 
             int pageNumber = page ?? 1; 
 
-            var Search = _context.Question.Include(q => q.Account).AsQueryable();
+            var Search = _context.Question.OrderByDescending(a => a.QuestionId).Include(q => q.Account).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
-                Search = Search.Where(u => u.Title != null && u.Title.Contains(name));
+                Search = Search.Where(u => u.Account.FullName != null && u.Account.FullName.Contains(name));
             }
 
             var pagedList = Search.ToPagedList(pageNumber, pageSize);
@@ -80,13 +80,14 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 question.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
             }
-            if (photo == null || photo.Length == 0)
-            {
-                ModelState.AddModelError("photo", "Please upload an image.");
-                ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Email");
-                return View(question);
-            }
-            else
+            //if (photo == null || photo.Length == 0)
+            //{
+            //    ModelState.AddModelError(nameof(question.Image), "Please upload an image.");
+            //    ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Email");
+            //    return View(question);
+            //}
+
+            if (photo != null && photo.Length != 0)
             {
                 var filePath = Path.Combine("wwwroot/images", photo.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -95,13 +96,18 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
 
                 question.Image = "/images/" + photo.FileName;
-                
-                _context.Add(question);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-
             }
-               
+            else
+            {
+                question.Image = ""; // Đường dẫn ảnh mặc định
+            }
+
+            _context.Add(question);
+            await _context.SaveChangesAsync();
+            TempData["CreateSuccess"] = "Create account successfully..";
+            return RedirectToAction(nameof(Index));
+                
+
         }
         [Authorize]
         // GET: Admin/Questions/Edit/5
@@ -160,6 +166,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(question);
                 await _context.SaveChangesAsync();
+                TempData["UpdateSuccess"] = "Update account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)

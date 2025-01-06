@@ -27,7 +27,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
-            var Search = _context.Position.AsQueryable();
+            var Search = _context.Position.OrderByDescending(a => a.PositionId).AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -74,6 +74,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             {
                 _context.Add(position);
                 await _context.SaveChangesAsync();
+                TempData["CreateSuccess"] = "Create account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(position);
@@ -114,6 +115,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(position);
                     await _context.SaveChangesAsync();
+                    TempData["UpdateSuccess"] = "Update account successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
