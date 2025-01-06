@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using ProjectSem3.Models;
+using X.PagedList.Extensions;
 
 namespace ProjectSem3.Controllers
 {
@@ -69,6 +70,14 @@ namespace ProjectSem3.Controllers
 
 
             }
+        }
+
+        public IActionResult GetAllPost(int? page)
+        {
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+            var post = _context.Post.OrderByDescending(x => x.PostId).ToPagedList(pageNumber, pageSize);
+            return View(post);
         }
     }
 }

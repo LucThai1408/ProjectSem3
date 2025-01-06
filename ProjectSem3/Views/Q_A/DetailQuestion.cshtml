@@ -1,0 +1,158 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@model ProjectSem3.Models.Question;
+@{
+    ViewData["Title"] = "DetailQuestion";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fc;
+        margin: 0;
+        padding: 0;
+    }
+
+    .content {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+        .content h3 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.6rem;
+            color: #555;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .content .post-meta {
+            font-size: 1.1rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
+    .comments-section {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+        .comments-section h4 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+    .comment {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+        .comment p {
+            font-size: 1.4rem;
+            color: #444;
+        }
+
+        .comment .meta {
+            font-size: 1.1rem;
+            color: #777;
+        }
+
+    .comment-form {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            resize: none;
+            font-size: 1.4rem;
+        }
+
+        .comment-form input[type="file"] {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .comment-form button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1.4rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .comment-form button:hover {
+                background-color: #0056b3;
+            }
+</style>
+@if (TempData["CreateAnswerSuccess"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["CreateAnswerSuccess"]</div>
+}
+<div class="content">
+    <!-- Tiêu đề và nội dung bài viết -->
+    <p style="font-size: 2rem;">@Model.Content</p>
+
+    <!-- Phần bình luận -->
+    <div class="comments-section">
+        <h4>Comments</h4>
+        @if (ViewBag.Answer != null && ((IEnumerable<Answer>)ViewBag.Answer).Any())
+        {
+            foreach (var comment in (IEnumerable<Answer>)ViewBag.Answer)
+            {
+                <div class="comment">
+                    <p>@comment.Content</p>
+                    <div class="meta">By: @comment.Account.FullName | @comment.CreatedAt.ToString("dd/MM/yyyy")</div>
+                    @if (!string.IsNullOrEmpty(comment.Image))
+                    {
+                        <div>
+                            <img src="@comment.Image" alt="Comment Image" style="max-width: 80px; margin-top: 10px;" />
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <p>The post does not have any comments yet!</p>
+        }
+
+        <!-- Form nhập bình luận -->
+        <div class="comment-form">
+            <h4>Add a comment</h4>
+            <form asp-action="AddAnswer" asp-controller="Q_A" method="post" enctype="multipart/form-data">
+                @{
+                    var accountId = HttpContextAccessor.HttpContext.Session.GetString("AccountId");
+                }
+                <input type="hidden" name="questionId" value="@Model.QuestionId" />
+                <!-- Thêm AccountId và Content sử dụng name -->
+                <input type="hidden" name="AccountId" value="@accountId" />
+                <textarea name="Content" placeholder="Write your comment..." required></textarea>
+
+                <!-- Chọn ảnh để upload -->
+                <input asp-for="Image" name="photo" type="file" accept="image/*" />
+
+                <button type="submit">Submit Comment</button>
+            </form>
+        </div>
+
+    </div>
+</div>

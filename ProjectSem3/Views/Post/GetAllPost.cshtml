@@ -1,16 +1,9 @@
-﻿@model X.PagedList.IPagedList<ProjectSem3.Models.Question>
+﻿@model X.PagedList.IPagedList<ProjectSem3.Models.Post>
 @using X.PagedList.Mvc.Core;
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "GetAllPost";
 }
-@if (TempData["success"] != null)
-{
-    <div class="alert alert-success text-center">@TempData["success"]</div>
-}
-@if (TempData["CreateQuestionSuccess"] != null)
-{
-    <div class="alert alert-success text-center">@TempData["CreateQuestionSuccess"]</div>
-}
+
 <style>
     .user-info-panel {
         position: fixed;
@@ -49,7 +42,7 @@
         border-radius: 5px;
         font-weight: bold;
         transition: background-color 0.3s, color 0.3s;
-        margin-top: 40px;
+        margin-top: 20px;
     }
 
         .create-button:hover {
@@ -61,19 +54,10 @@
 <!-- MAIN -->
 <main>
     <div class="container">
-        <!-- Information Panel -->
-        <div class="user-info-panel">
-            <div class="info-box">
-                <h4>Total Users : @ViewData["TotalAccount"]</h4>
-            </div>
-            <div class="info-box">
-                <h4>Logged-in : @ViewData["LoggedInUsers"]</h4>
-            </div>
-        </div>
-        <a class="create-button" asp-action="CreateQuestion" asp-controller="Q_A">Create questions</a>
+        <a class="create-button" asp-action="Create" asp-controller="Post">Create post</a>
         <div class="posts">
             <div class="posts__head">
-                <div class="posts__topic">Questions</div>
+                <div class="posts__topic">Post</div>
                 <div class="posts__category"></div>
                 <div class="posts__activity">CreatedAt</div>
             </div>
@@ -84,8 +68,8 @@
                         <div class="posts__section-left">
                             <div class="posts__topic">
                                 <div class="posts__content">
-                                    <a asp-action="DetailQuestion" asp-controller="Q_A" asp-route-id="@item.QuestionId">
-                                        <h3>@item.Content</h3>
+                                    <a asp-action="PostDetail" asp-controller="Post" asp-route-id="@item.PostId">
+                                        <h3>@item.Title</h3>
                                     </a>
                                 </div>
                             </div>
@@ -99,7 +83,7 @@
             <div class="d-flex justify-content-center mt-3">
                 @if (Model.PageCount > 1)
                 {
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                    @Html.PagedListPager(Model, page => Url.Action("GetAllPost", new { page }),
                              new PagedListRenderOptions
                 {
                     UlElementClasses = new List<string> { "pagination" },

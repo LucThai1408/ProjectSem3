@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectSem3.Models;
 using System.Diagnostics;
+using X.PagedList.Extensions;
 
 namespace ProjectSem3.Controllers
 {
@@ -12,14 +13,16 @@ namespace ProjectSem3.Controllers
             this._context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
             var totalAccount = _context.Account.Count();
             var loggedInUsers = _context.Account.Count(a => a.Online==1);
             ViewData["TotalAccount"] = totalAccount;
             ViewData["LoggedInUsers"] = loggedInUsers;
-            return View();
+            var question = _context.Question.OrderByDescending(x=>x.QuestionId).ToPagedList(pageNumber , pageSize);
+            return View(question);
         }
 
         public IActionResult Privacy()

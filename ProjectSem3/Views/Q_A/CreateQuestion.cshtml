@@ -1,0 +1,44 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+@model ProjectSem3.Models.Question;
+@{
+    ViewData["Title"] = "CreateQuestion";
+}
+<!-- MAIN -->
+<main>
+    <div class="container">
+        <form asp-action="CreateQuestion" enctype="multipart/form-data">
+            @{
+                var accountId = HttpContextAccessor.HttpContext.Session.GetString("AccountId");
+            }
+
+            <input type="hidden" asp-for="AccountId" value="@accountId" />
+
+            <div class="create">
+                <div class="create__head">
+                    <div class="create__title"><img src="/Client/fonts/icons/main/New_Topic.svg" alt="New topic">Create New Question</div>
+                    <span>Forum Guidelines</span>
+                </div>
+
+                
+                <!-- Content input -->
+                <div class="create__section create__textarea">
+                    <label class="create__label" for="Content">Content</label>
+                    <textarea asp-for="Content" class="form-control" placeholder="Enter question content"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <!-- Image upload -->
+                <div class="form-group">
+                    <label asp-for="Image" class="control-label">Image</label>
+                    <input asp-for="Image" class="form-control" type="file" name="photo" />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+
+                <div class="create__footer">
+                    <a asp-action="Index" asp-controller="Home" class="create__btn-cansel btn">Cancel</a>
+                    <button type="submit" class="create__btn-create btn btn--type-02">Create Question</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>

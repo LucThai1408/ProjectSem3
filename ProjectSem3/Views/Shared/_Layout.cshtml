@@ -10,7 +10,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Responsive HTML5 Template">
     <meta name="author" content="author.com">
-    <title>Doctor Forum</title>
+    <title>MedForum</title>
 
     <!-- STYLESHEET -->
     <!-- fonts -->
@@ -19,7 +19,9 @@
     <!-- icon -->
     <link rel="stylesheet" href="/Client/fonts/icons/main/mainfont/style.css">
     <link rel="stylesheet" href="/Client/fonts/icons/font-awesome/css/font-awesome.min.css">
-
+    <!-- Favicon -->
+    <link rel="icon" href="/Client/images/logo.png" type="image/png">
+    <link rel="shortcut icon" href="/Client/images/logo.png" type="image/png">
     <!-- Vendor -->
     <link rel="stylesheet" href="/Client/vendor/bootstrap/v3/bootstrap.min.css">
     <link rel="stylesheet" href="/Client/vendor/bootstrap/v4/bootstrap-grid.css">
@@ -34,12 +36,12 @@
 </head>
 <style>
     .header__user-btn img {
-        width: 50px; /* Đảm bảo kích thước ảnh đồng đều */
-        height: 50px; /* Đảm bảo ảnh là hình vuông */
-        border-radius: 50%; /* Làm cho ảnh bo tròn */
-        object-fit: cover; /* Cắt ảnh nếu kích thước không đồng đều */
-        border: 2px solid #fff; /* Tùy chọn: Thêm viền trắng xung quanh */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Tùy chọn: Thêm bóng đổ */
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
 </style>
@@ -49,16 +51,14 @@
         <div class="header js-header js-dropdown">
             <div class="container">
                 <div class="header__logo">
-                    <h1>
-                        <img src="/Client/fonts/icons/main/Logo_Forum.svg" alt="logo">
-                    </h1>
+                    <img src="/Client/images/bieutuongCTD.jpg" alt="logo">
                     <div class="header__logo-btn" data-dropdown-btn="logo">
-                        Unity<i class="icon-Arrow_Below"></i>
+                        MedForum<i class="icon-Arrow_Below"></i>
                     </div>
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
                             <li><a asp-controller="Home" asp-action="Index">Home Page</a></li>
-                            <li><a asp-action="Create" asp-controller="Post">Create Topic Page</a></li>
+                            <li><a asp-action="GetAllPost" asp-controller="Post">Posts Page</a></li>
                             <li><a asp-action="Register" asp-controller="Account">Register Page</a></li>
                         </ul>
                     </nav>
@@ -90,41 +90,7 @@
                 @{
                     if (HttpContextAccessor.HttpContext.Session.GetString("FullName") != null)
                     {
-                        <div class="header__notification">
-                            <div class="header__notification-btn" data-dropdown-btn="notification">
-                                <i class="icon-Notification"></i>
-                                <span>6</span>
-                            </div>
-                            <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
-                                <div>
-                                    <a href="#">
-                                        <i class="icon-Favorite_Topic"></i>
-                                        <p>Roswell . 16 feb, 17<span>Which movie have you watched recently?</span></p>
-                                    </a>
-                                    <a href="#">
-                                        <i class="icon-Reply_Empty"></i>
-                                        <p>Callis . 18 feb, 17<span>I got an amzon thingie!</span></p>
-                                    </a>
-                                    <a href="#">
-                                        <i class="icon-Badge"></i>
-                                        <p>Earned Badge . 19 feb, 17<span><img src="/Client/fonts/icons/badges/Lets_talk.svg" alt="Lets Talk">Lets Talk</span></p>
-                                    </a>
-                                    <a href="#">
-                                        <i class="icon-Badge"></i>
-                                        <p>Earned Badge . 21 feb, 17<span><img src="/Client/fonts/icons/badges/Intermediate.svg" alt="Intermediate">Intermediate</span></p>
-                                    </a>
-                                    <a href="#">
-                                        <i class="icon-Share_Topic"></i>
-                                        <p>Charlie . 22 feb, 17<span>Need Video file of that cat.</span></p>
-                                    </a>
-                                    <a href="#">
-                                        <i class="icon-Pencil"></i>
-                                        <p>Greentea . 22 feb, 17<span>New Facebook like and share button.</span></p>
-                                    </a>
-                                    <span><a href="#">view older notifications...</a></span>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="header__user">
                             <div class="header__user-btn" data-dropdown-btn="user">
                                 <img src="@HttpContextAccessor.HttpContext.Session.GetString("Avatar")" width="50" alt="avatar">
@@ -139,17 +105,6 @@
                                         <a asp-controller="Account" asp-action="Logout"><i class="icon-Logout"></i></a>
                                     </div>
                                 </div>
-                                @*<div>
-                        <ul class="dropdown__catalog">
-                        <li><a href="#">Dashboard</a></li>
-                        <li><a href="#">Badges</a></li>
-                        <li><a href="#">My Groups</a></li>
-                        <li><a href="#">Notifications</a></li>
-                        <li><a href="#">Topics</a></li>
-                        <li><a href="#">Likes</a></li>
-                        <li><a href="#">Solved</a></li>
-                        </ul>
-                        </div>*@
                             </nav>
                         </div>
 
@@ -179,7 +134,7 @@
             <div class="container">
                 <div class="footer__logo">
                     <div>
-                        <img src="/Client/fonts/icons/main/Logo_Forum.svg" alt="logo">Unity
+                        <img src="/Client/images/bieutuongCTD.jpg" alt="logo">MedForum
                     </div>
                 </div>
                 <div class="footer__nav">

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectSem3.Models;
 
@@ -11,9 +12,11 @@ using ProjectSem3.Models;
 namespace ProjectSem3.Migrations
 {
     [DbContext(typeof(DoctorContext))]
-    partial class DoctorContextModelSnapshot : ModelSnapshot
+    [Migration("20250105094217_v5")]
+    partial class v5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
