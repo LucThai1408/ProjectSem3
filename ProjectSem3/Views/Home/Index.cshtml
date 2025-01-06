@@ -85,7 +85,10 @@
                             <div class="posts__topic">
                                 <div class="posts__content">
                                     <a asp-action="DetailQuestion" asp-controller="Q_A" asp-route-id="@item.QuestionId">
-                                        <h3>@item.Content</h3>
+                                        @{
+                                            var content = item.Content.Length > 50 ? item.Content.Substring(0, 50) + "..." : item.Content;
+                                        }
+                                        <h3>@content</h3>
                                     </a>
                                 </div>
                             </div>
