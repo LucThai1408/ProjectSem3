@@ -28,7 +28,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageNumber = page ?? 1; 
 
             // Khởi tạo truy vấn
-            var Search = _context.Level.AsQueryable();
+            var Search = _context.Level.OrderByDescending(a => a.LevelId).AsQueryable();
 
             // Tìm kiếm theo tên
             if (!string.IsNullOrEmpty(name))
@@ -75,7 +75,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(level);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); TempData["CreateSuccess"] = "Create account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             return View(level);
@@ -116,6 +116,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Update(level);
                     await _context.SaveChangesAsync();
+                    TempData["UpdateSuccess"] = "Update account successfully..";
                 }
                 catch (DbUpdateConcurrencyException)
                 {

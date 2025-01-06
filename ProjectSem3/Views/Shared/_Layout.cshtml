@@ -79,10 +79,9 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="menu">
                         <div>
                             <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#">Postition</a></li>
-                                <li class="col-xs-6"><a href="#">Level</a></li>
-                                <li class="col-xs-6"><a href="#">Expertise</a></li>
-                                <li class="col-xs-6"><a href="#">Experience</a></li>
+                                <li class="col-xs-6"><a asp-action="ListPostition" asp-controller="Home">Postition</a></li>
+                                <li class="col-xs-6"><a asp-action="ListLevel" asp-controller="Home">Level</a></li>
+                                <li class="col-xs-6"><a asp-action="ListExpertise" asp-controller="Home">Expertise</a></li>
                             </ul>
                         </div>
                     </nav>
@@ -199,6 +198,7 @@
     <script src="/Client/vendor/jquery/jquery.min.js"></script>
     <script src="/Client/vendor/velocity/velocity.min.js"></script>
     <script src="/Client/js/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha512-Cy3gSrKCS8aJ7AIaammc0wLXyKRmTa8ntgHvU01Tuz4EdsqVgk/lKzFm/b/8RxOWBaoHI2uGLLU6rXMbqKcGHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

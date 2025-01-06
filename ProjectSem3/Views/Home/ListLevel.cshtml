@@ -1,0 +1,92 @@
+﻿@{
+}
+<style>
+    .content {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    #myTab button {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        #myTab button.active {
+            background: #ffddfa;
+        }
+
+    #myTab li {
+        text-align: center;
+        margin: 0;
+    }
+
+    #myTab button {
+        border: 0;
+        background: transparent;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        #myTab button:hover {
+            background: #f0f0f0;
+        }
+
+        #myTab button.active {
+            background: #ffddfa;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+</style>
+
+<div class="posts__body content">
+    <div>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var item = Model[i];
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link @(i==0 ? "active" : "")"
+                            id="home-tab-@item.LevelId" data-toggle="tab" data-target="#home-@item.LevelId" type="button" role="tab" aria-controls="home-@item.LevelId" aria-selected="@(i==0 ? "true" : "false")">
+                        @item.LevelName
+                    </button>
+                </li>
+            }
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var type = Model[i];
+                <div class="tab-pane fade @(i==0 ? "active in" : "")" id="home-@type.LevelId" role="tabpanel" aria-labelledby="home-tab-@type.LevelId">
+                    @foreach (var account in type.Account)
+                    {
+                        <div class="posts__item bg-f2f4f6" style="margin-bottom: 20px;">
+                            <div class="posts__section-left">
+                                <div class="posts__topic">
+                                    <div class="posts__content">
+                                        <h3> <a asp-action="ViewDetailAccount" asp-controller="Account" asp-route-id="@account.AccountId">@account.FullName</a></h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

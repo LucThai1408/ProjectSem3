@@ -27,7 +27,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
-            var Search = _context.Post.Include(p => p.Accounts).Include(p => p.Topic)
+            var Search = _context.Post.OrderByDescending(a => a.PostId).Include(p => p.Accounts).Include(p => p.Topic)
                                  .AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
@@ -94,7 +94,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
 
             if (photo == null || photo.Length == 0)
             {
-                ModelState.AddModelError("Image", "Please upload an image.");
+                ModelState.AddModelError(nameof(post.Image), "Please upload an image.");
                 ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "FullName");
                 ViewData["TopicId"] = new SelectList(_context.Topic, "TopicId", "Title");
                 return View(post);
@@ -112,6 +112,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 {
                     _context.Add(post);
                     await _context.SaveChangesAsync();
+                    TempData["CreateSuccess"] = "Create account successfully..";
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "FullName", post.AccountId);
@@ -179,6 +180,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(post);
                 await _context.SaveChangesAsync();
+                TempData["UpdateSuccess"] = "Update account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)

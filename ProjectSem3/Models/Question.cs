@@ -6,9 +6,8 @@ namespace ProjectSem3.Models
     {
         [Key]
         public int QuestionId { get; set; }
-        public string? Title { get; set; }
-        [Required]
         public string? Content { get; set; }
+        [Required]
         public string? Image { get; set; }
 
         public int AccountId { get; set; }

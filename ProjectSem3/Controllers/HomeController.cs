@@ -1,6 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProjectSem3.Models;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using X.PagedList.Extensions;
 
 namespace ProjectSem3.Controllers

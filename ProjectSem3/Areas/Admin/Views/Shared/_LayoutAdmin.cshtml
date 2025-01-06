@@ -121,7 +121,7 @@
 
                 <li class="dropdown notification-list">
                     <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="@User.FindFirst("avatar").Value" alt="user-image" class="rounded-circle">
+                        <img src="@User.FindFirst("avatar").Value" alt="user-image" style="object-fit: cover" class="rounded-circle">
                         <span class="pro-user-name ml-1">
                             @User.FindFirst("fullName").Value  <i class="mdi mdi-chevron-down"></i>
                         </span>
@@ -195,7 +195,7 @@
 
             <div class="user-box">
                 <div class="float-left">
-                    <img src=" @User.FindFirst("avatar").Value" alt="" class="avatar-md rounded-circle">
+                    <img src=" @User.FindFirst("avatar").Value" alt="" style="object-fit: cover" class="avatar-md rounded-circle">
                 </div>
                 <div class="user-info">
                     <a href="#"> @User.FindFirst("fullName").Value</a>

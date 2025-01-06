@@ -28,12 +28,12 @@ namespace ProjectSem3.Areas.Admin.Controllers
             int pageSize = 10;
             int pageNumber = page ?? 1;
 
-            var Search = _context.Answer.Include(a => a.Account).Include(a => a.Question).AsQueryable();
+            var Search = _context.Answer.OrderByDescending(a=> a.AnswerId).Include(a => a.Account).Include(a => a.Question).AsQueryable();
 
-            /*if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
-                Search = Search.Where(u => u.Title != null && u.Title.Contains(name));
-            }*/
+                Search = Search.Where(u => u.Account.FullName != null && u.Account.FullName.Contains(name));
+            }
 
             var pagedList = Search.ToPagedList(pageNumber, pageSize);
             return View(pagedList);
@@ -77,33 +77,31 @@ namespace ProjectSem3.Areas.Admin.Controllers
         public async Task<IActionResult> Create( Answer answer, IFormFile? photo)
         {
 
-            if (photo == null || photo.Length == 0)
-            {
-                ModelState.AddModelError("photo", "Please upload an image.");
-                ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Email", answer.AccountId);
-                ViewData["QuestionId"] = new SelectList(_context.Question, "QuestionId", "Content", answer.QuestionId);
-                return View(answer);
-            }
-            else
-            {
                 var accountIdClaim = User.FindFirst("accountId");
                 if (accountIdClaim != null)
                 {
                     answer.AccountId = int.Parse(accountIdClaim.Value); // Gán AccountId vào bài viết
                 }
-                var filePath = Path.Combine("wwwroot/images", photo.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (photo != null && photo.Length != 0)
                 {
-                    await photo.CopyToAsync(stream);
-                }
+                    var filePath = Path.Combine("wwwroot/images", photo.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
+                    }
 
-                answer.Image = "/images/" + photo.FileName;
+                    answer.Image = "/images/" + photo.FileName;
+                }
+                else
+                {
+                    answer.Image = ""; 
+                }
 
                 _context.Add(answer);
                 await _context.SaveChangesAsync();
+                TempData["CreateSuccess"] = "Create account successfully..";
                 return RedirectToAction(nameof(Index));
 
-            }
         }
         [Authorize]
         // GET: Admin/Answers/Edit/5
@@ -160,6 +158,7 @@ namespace ProjectSem3.Areas.Admin.Controllers
                 }
                 _context.Update(answer);
                 await _context.SaveChangesAsync();
+                TempData["UpdateSuccess"] = "Update account successfully..";
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
