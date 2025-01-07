@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using ProjectSem3.Models;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Text;
 using X.PagedList.Extensions;
 
 namespace ProjectSem3.Controllers
@@ -274,6 +275,7 @@ namespace ProjectSem3.Controllers
         public IActionResult ViewDetailAccount(int id) {
             var acc = _context.Account.Include(x => x.Position).Include(x=> x.Level).Include(x => x.Expertise).FirstOrDefault(x=> x.AccountId == id);
             ViewBag.Posts = _context.Post.OrderByDescending(x=>x.PostId).Where(x => x.AccountId == id).ToList();
+            ViewBag.Questions = _context.Question.OrderByDescending(x => x.QuestionId).Where(x => x.AccountId == id).ToList();
             return View(acc);
         }
     }

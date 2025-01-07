@@ -64,9 +64,6 @@
             <th>
                 @Html.DisplayNameFor(model => model[0].Level)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].CreatedAt)
-            </th>
             <th>Action</th>
         </tr>
     </thead>
@@ -96,9 +93,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Level.LevelName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AccountId" class="btn btn-info">Edit</a> |

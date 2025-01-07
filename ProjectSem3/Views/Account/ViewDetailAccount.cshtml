@@ -221,4 +221,30 @@
             <p>The user has no posts.</p>
         }
     </div>
+
+    <!-- Posts Section -->
+    <div class="posts-section">
+        <h2>The quest of @Model.FullName</h2>
+        @if (ViewBag.Questions != null && ((IEnumerable<Question>)ViewBag.Questions).Any())
+        {
+            foreach (var question in (IEnumerable<Question>)ViewBag.Questions)
+            {
+                <div class="post">
+                    <div class="post-header">
+                        <img src="@Model.Avatar" alt="Avatar" class="post-avatar">
+                        <a asp-action="DetailQuestion" asp-controller="Q_A" asp-route-id="@question.QuestionId">
+                            @{
+                                var content = question.Content.Length > 50 ? question.Content.Substring(0, 50) + "..." : question.Content;
+                            }
+                            <h6>@content</h6>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>The user has no questions.</p>
+        }
+    </div>
 </section>
